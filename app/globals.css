@@ -282,3 +282,41 @@
 .hero-device > img {
   animation: rise 1.4s var(--ease-out-soft) 0.25s both;
 }
+
+/* ---------------------------------------------------------------- legal pages (Apple-style edition) */
+.legal {
+  min-height: 100svh;
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+.legal-back {
+  font-size: 14px;
+  color: var(--color-blue);
+}
+.legal-back:hover {
+  text-decoration: underline;
+}
+.legal-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.legal-meta {
+  font-size: 14px;
+  color: var(--color-ink-3);
+}
+.legal-intro {
+  font-size: 19px;
+  line-height: 1.45;
+  color: var(--color-ink-2);
+}
+.legal-h2 {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.legal-p {
+  line-height: 1.5;
+  color: var(--color-ink-2);
+}

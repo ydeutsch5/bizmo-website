@@ -7,7 +7,7 @@ const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const ease = (k: number) => 1 - Math.pow(1 - clamp01(k), 3);
 
 /**
- * Centered launch hero. On scroll the headline lifts away and the tablet rises into the centre
+ * Centered launch hero. On scroll the headline lifts away and the device rises into the centre
  * of the screen and grows slightly, the way Apple product pages hand the stage to the product.
  */
 export default function Hero() {
@@ -79,7 +79,7 @@ export default function Hero() {
 
         <div ref={device} className="hero-device relative mt-[clamp(2rem,6vh,4rem)] w-[min(1000px,92vw,calc((100svh-150px)*1.53))] origin-top will-change-transform">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/apple/front.webp" alt="Bizmo tablet, front view, showing the official beach wallpaper" className="relative z-10 block w-full" fetchPriority="high" />
+          <img src="/apple/front.webp" alt="Bizmo, front view, showing the official beach wallpaper" className="relative z-10 block w-full" fetchPriority="high" />
           <div ref={shadow} aria-hidden="true" className="absolute inset-x-[8%] -bottom-[4%] h-[9%] rounded-[50%] bg-black/25 blur-2xl" />
         </div>
       </div>

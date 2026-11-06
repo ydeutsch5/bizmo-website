@@ -38,7 +38,8 @@ export default function SpeedEd() {
     const paint = () => {
       raf = 0;
       const r = el.getBoundingClientRect();
-      const p = reduced ? 1 : clamp01((innerHeight * 0.85 - r.top) / (r.height * 0.8));
+      // starts once the diagram is well into view, not as soon as it peeks in
+      const p = reduced ? 1 : clamp01((innerHeight * 0.5 - r.top) / (r.height * 0.6));
       const f = ease(p / 0.4);
       const s = p < 0.42 ? ease(p / 0.42) * 0.5 : p < 0.64 ? 0.5 : 0.5 + ease((p - 0.64) / 0.36) * 0.5;
       const a = sp.getPointAtLength(s * sl);
@@ -84,7 +85,7 @@ export default function SpeedEd() {
       <div className="wrap-wide mt-14 md:mt-20">
         <figure className="tile mx-auto max-w-[1180px] bg-canvas px-4 py-10 md:px-12 md:py-16" dir="ltr">
           <svg viewBox={`0 0 ${VW} 400`} className="h-auto w-full overflow-visible" role="img" aria-labelledby="sp-t">
-            <title id="sp-t">A tablet with a filter routes traffic through a filter server before it reaches your apps. Bizmo connects directly.</title>
+            <title id="sp-t">An ordinary device with a filter routes traffic through a filter server before it reaches your apps. Bizmo connects directly.</title>
             <defs>
               <linearGradient id="sp-g" gradientUnits="userSpaceOnUse" x1={a} y1="0" x2={b} y2="0">
                 <stop offset="0" stopColor="#0463EF" />

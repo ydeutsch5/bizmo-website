@@ -1,4 +1,4 @@
-import { daily, ed, footer, site } from "@/lib/content";
+import { daily, ed, footer, legalNav, site } from "@/lib/content";
 
 export default function FooterEd() {
   return (
@@ -7,7 +7,7 @@ export default function FooterEd() {
         <p className="border-b border-hair pb-4 text-ink-3">{daily.caption} {footer.note}</p>
         <nav aria-label="Footer" className="border-b border-hair py-4">
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
-            {ed.nav.map((n) => (
+            {[...ed.nav, ...legalNav].map((n) => (
               <li key={n.href}>
                 <a href={n.href} className="hover:text-ink hover:underline">
                   {n.label}

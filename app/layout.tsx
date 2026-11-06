@@ -7,7 +7,7 @@ const indexable = process.env.ALLOW_INDEXING === "1";
 
 export const metadata: Metadata = {
   metadataBase: new URL(`https://${site.domain}`),
-  title: `${site.name}, the kosher business tablet`,
+  title: `${site.name}. ${site.oneLine}`,
   description: hero.lead,
   robots: indexable ? undefined : { index: false, follow: false },
   openGraph: {
