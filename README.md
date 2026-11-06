@@ -46,7 +46,7 @@ The current clips are concept footage generated with Nano Banana Pro (end frames
 ## Sign-up storage
 
 - **Development** (`npm run dev`) without settings: sign-ups are appended to `.data/signups.jsonl`.
-- **Production:** create the table with `supabase/schema.sql`, then set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (see `.env.example`). Without them, the production API answers 503 so nothing is silently lost.
+- **Production:** create the table with `supabase/schema.sql`, then set `SUPABASE_URL` and `SUPABASE_KEY` (the publishable key; see `.env.example`). Without them, the production API answers 503 so nothing is silently lost.
 - Duplicate emails are merged. A hidden "company" field catches simple spam bots.
 
 ## Before launch

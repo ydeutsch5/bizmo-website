@@ -272,7 +272,7 @@ export const notify = {
     name: "Enter your name.",
     email: "Enter an email address like name@example.com.",
     city: "Enter the city where you would buy Bizmo.",
-    server: "Your details were not sent. Check your connection and try again.",
+    server: "We could not save your details just now. Please try again in a moment.",
   },
 };
 

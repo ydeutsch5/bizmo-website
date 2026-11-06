@@ -3,7 +3,8 @@ import { join } from "node:path";
 
 /**
  * Launch sign-ups.
- * Production: set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (see supabase/schema.sql).
+ * Production: set SUPABASE_URL and SUPABASE_KEY (the project's publishable/anon key is enough: the table
+ * only allows inserts through it, see supabase/schema.sql; the service role key also works).
  * Development without those: rows are appended to .data/signups.jsonl.
  */
 
@@ -29,20 +30,22 @@ export async function POST(req: Request) {
   if (!row.name || !row.city || !EMAIL.test(row.email)) return Response.json({ error: "Missing or invalid fields" }, { status: 422 });
 
   const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key = process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const table = process.env.SUPABASE_TABLE || "bizmo_launch_signups";
 
   if (url && key) {
-    const r = await fetch(`${url.replace(/\/$/, "")}/rest/v1/launch_signups?on_conflict=email`, {
+    const r = await fetch(`${url.replace(/\/$/, "")}/rest/v1/${table}`, {
       method: "POST",
       headers: {
         apikey: key,
         Authorization: `Bearer ${key}`,
         "Content-Type": "application/json",
-        Prefer: "resolution=merge-duplicates,return=minimal",
+        Prefer: "return=minimal",
       },
       body: JSON.stringify(row),
     });
-    if (!r.ok) {
+    // 409: this email is already on the list, which is fine
+    if (!r.ok && r.status !== 409) {
       console.error("notify: supabase insert failed", r.status, await r.text());
       return Response.json({ error: "Could not save" }, { status: 502 });
     }
@@ -50,7 +53,7 @@ export async function POST(req: Request) {
   }
 
   if (process.env.NODE_ENV === "production") {
-    console.error("notify: SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are not set");
+    console.error("notify: SUPABASE_URL / SUPABASE_KEY are not set");
     return Response.json({ error: "Sign-up storage is not configured" }, { status: 503 });
   }
   const dir = join(process.cwd(), ".data");
