@@ -41,6 +41,18 @@ export type Callout = {
   sub?: string;
 };
 
+/** HTML drawn onto a rectangle of the frame (for example the device's screen); follows the virtual camera. */
+export type Screen = {
+  id: string;
+  u: number; // top-left corner in frame space (0..1)
+  v: number;
+  w: number; // size as fractions of the frame
+  h: number;
+  in: number;
+  out: number;
+  node: ReactNode;
+};
+
 export type FilmProps = {
   id: string;
   label: string;
@@ -48,6 +60,7 @@ export type FilmProps = {
   tl: ReturnType<typeof timeline>;
   copy: Copy[];
   callouts?: Callout[];
+  screens?: Screen[];
   /** extra scroll (viewport heights) after the last beat before the section unpins */
   tail?: number;
   scrim?: "start" | "both" | "strong" | "none";
@@ -74,7 +87,7 @@ export default function ScrollFilm(props: FilmProps) {
 
 /* ================================================================== pinned film */
 
-function PinnedFilm({ id, label, clips, tl, copy, callouts = [], tail = 0.6, scrim = "start", glow }: FilmProps) {
+function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], tail = 0.6, scrim = "start", glow }: FilmProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -90,6 +103,8 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], tail = 0.6, scr
     stage.querySelectorAll<HTMLElement>("[data-copy]").forEach((el) => copyEls.set(el.dataset.copy!, el));
     const calloutEls = new Map<string, HTMLElement>();
     stage.querySelectorAll<HTMLElement>("[data-callout]").forEach((el) => calloutEls.set(el.dataset.callout!, el));
+    const screenEls = new Map<string, HTMLElement>();
+    stage.querySelectorAll<HTMLElement>("[data-screen]").forEach((el) => screenEls.set(el.dataset.screen!, el));
 
     let view: View = { W: 1, H: 1, mobile: false };
     let dpr = 1;
@@ -219,6 +234,25 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], tail = 0.6, scr
         }
       }
 
+      // screens are laid onto the frame, so they move and scale with the camera
+      for (const s of screens) {
+        const el = screenEls.get(s.id);
+        if (!el) continue;
+        const o = !place ? 0 : opacityAt(p, s.in, s.out);
+        el.style.opacity = o.toFixed(3);
+        el.style.visibility = o < 0.01 ? "hidden" : "visible";
+        if (o < 0.01 || !place) continue;
+        const pt = project(place, s.u, s.v);
+        el.style.transform = `translate3d(${pt.x.toFixed(1)}px, ${pt.y.toFixed(1)}px, 0)`;
+        el.style.width = `${(s.w * place.dw).toFixed(1)}px`;
+        el.style.height = `${(s.h * place.dh).toFixed(1)}px`;
+        el.querySelectorAll<HTMLElement>("[data-reveal-at]").forEach((r) => {
+          const ro = smooth((p - Number(r.dataset.revealAt)) / 0.22);
+          r.style.opacity = ro.toFixed(3);
+          r.style.transform = `translate3d(0, ${((1 - ro) * 6).toFixed(1)}px, 0)`;
+        });
+      }
+
       if (progressRef.current) progressRef.current.style.transform = `scaleX(${clamp01(p / tl.total).toFixed(4)})`;
 
       if (inView) raf = requestAnimationFrame(render);
@@ -257,7 +291,7 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], tail = 0.6, scr
       ro.disconnect();
       store?.destroy();
     };
-  }, [clips, tl, copy, callouts]);
+  }, [clips, tl, copy, callouts, screens]);
 
   return (
     <section ref={sectionRef} id={id} aria-label={label} className="relative bg-graphite" style={{ height: `${(tl.total + tail) * 100}svh` }}>
@@ -286,6 +320,12 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], tail = 0.6, scr
             <div className="absolute inset-x-0 top-0 h-32 bg-[linear-gradient(to_bottom,rgb(16_18_22/0.7),transparent)]" />
           </div>
         )}
+
+        {screens.map((s) => (
+          <div key={s.id} data-screen={s.id} aria-hidden="true" dir="ltr" className="pointer-events-none absolute top-0 left-0 overflow-hidden opacity-0 will-change-transform" style={{ visibility: "hidden" }}>
+            {s.node}
+          </div>
+        ))}
 
         {callouts.map((c) => (
           <div key={c.id} data-callout={c.id} aria-hidden="true" dir="ltr" className="callout">

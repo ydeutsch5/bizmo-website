@@ -109,14 +109,14 @@ export default function Apps() {
         <div className="mt-8 grid gap-10 md:grid-cols-[minmax(0,7fr)_minmax(0,4fr)] md:items-end md:gap-16">
           <h2 id="apps-title" className="display display-xl text-white" data-reveal-lines>
             <span className="line-mask">
-              <span>About 190</span>
+              <span>{apps.title}</span>
             </span>
             <span className="line-mask">
-              <span style={{ ["--d" as string]: "0.1s" }}>business apps.</span>
+              <span style={{ ["--d" as string]: "0.1s" }}>{apps.titleSecond}</span>
             </span>
             <span className="line-mask">
               <span className="text-aluminium/45" style={{ ["--d" as string]: "0.2s" }}>
-                {apps.titleSecond}
+                {apps.titleThird}
               </span>
             </span>
           </h2>
@@ -157,7 +157,6 @@ export default function Apps() {
                       />
                       {c.name}
                     </span>
-                    <span className="font-mono text-[0.75rem] tracking-[0.1em] tabular-nums">{String(c.count).padStart(2, "0")}</span>
                   </button>
                 );
               })}
@@ -165,8 +164,8 @@ export default function Apps() {
           </div>
 
           <div id="apps-panel" role="tabpanel" aria-labelledby={`tab-${cat.id}`} className="min-h-[24rem] md:pt-12">
-            <p className="font-display text-[clamp(4rem,9vw,8.5rem)] leading-none font-light text-white tabular-nums">{cat.count}</p>
-            <p className="mt-3 text-[0.95rem] text-mist">approved {cat.name.toLowerCase()} apps, including</p>
+            <p className="font-display text-[clamp(2.2rem,4vw,3.5rem)] leading-none font-light text-white">{cat.name}</p>
+            <p className="mt-3 text-[0.95rem] text-mist">Approved apps include</p>
             <ul key={cat.id} className="apps-list mt-8 columns-1 gap-10 sm:columns-2 lg:columns-3">
               {cat.apps.map((a, i) => (
                 <li key={a} className="break-inside-avoid border-t border-white/[0.07] py-2.5 text-[1.05rem] text-aluminium/90" style={{ animationDelay: `${i * 25}ms` }}>
@@ -177,18 +176,25 @@ export default function Apps() {
           </div>
         </div>
 
-        <div className="mt-28 md:mt-40" data-reveal>
-          <p className="act">{apps.notTitle}</p>
-          <ul className="mt-8 flex flex-wrap gap-x-[clamp(1.5rem,3.5vw,3.5rem)] gap-y-4 font-display text-[clamp(1.9rem,4vw,3.75rem)] leading-tight font-light text-aluminium/50" aria-label="Not available on Bizmo">
-            {apps.not.map((n, i) => (
-              <li key={n}>
-                <span className="strike" style={{ ["--d" as string]: `${0.4 + i * 0.12}s` }}>
-                  {n}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-10 max-w-[44rem] text-[0.82rem] text-dim">{apps.note}</p>
+        {/* app approval: the big, bold promise */}
+        <div className="relative mt-28 overflow-hidden rounded-[1.75rem] border border-cyan/20 bg-[linear-gradient(135deg,rgb(4_99_239/0.22),rgb(45_218_255/0.05)_55%,transparent)] px-7 py-12 md:mt-40 md:px-14 md:py-20" data-reveal>
+          <div aria-hidden="true" className="pointer-events-none absolute -end-[20%] -top-[40%] h-[120%] w-[60%] rounded-full bg-[radial-gradient(closest-side,rgb(45_218_255/0.16),transparent)]" />
+          <p className="act">{apps.request.kicker}</p>
+          <p className="display display-xl mt-6 max-w-[16ch] text-white">{apps.request.title}</p>
+          <p className="lede mt-8 max-w-[34rem] text-aluminium/80">{apps.request.body}</p>
+          <div className="mt-10">
+            <a href="#notify" className="btn btn-light" data-cursor="Request">
+              {apps.request.cta}
+            </a>
+          </div>
+        </div>
+
+        <div className="mt-16 grid gap-8 border-t border-white/10 pt-12 md:mt-24 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-20" data-reveal>
+          <h3 className="display display-md text-white">{apps.control.title}</h3>
+          <div>
+            <p className="lede text-aluminium/75">{apps.control.body}</p>
+            <p className="mt-10 max-w-[44rem] text-[0.82rem] text-dim">{apps.note}</p>
+          </div>
         </div>
       </div>
     </section>

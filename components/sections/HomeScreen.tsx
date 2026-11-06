@@ -2,12 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { daily } from "@/lib/content";
+import AppIcon from "@/components/AppIcon";
 
 /*
   The studio render (screen off) with a live screen laid into it.
   Screen rectangle measured from the studio's colour mask for this view (RE9-1CC / RA1CC),
   relative to the cropped render: left 4.198%, top 6.534%, width 82.23%, height 87.11%.
-  App names are text on neutral tiles: third-party icons and logos are never reproduced.
+  Tiles show the real app icon when it exists in /public/apps/, otherwise the app's initial (see AppIcon).
 */
 const SCREEN = { left: "4.198%", top: "6.534%", width: "82.23%", height: "87.11%" };
 
@@ -110,7 +111,7 @@ export default function HomeScreen() {
         <div ref={stage} className="relative mx-auto mt-16 max-w-[1180px] [perspective:2200px] md:mt-24" data-reveal style={{ ["--d" as string]: "0.15s" }}>
           <div ref={device} className="relative transition-transform duration-[60ms] [transform-style:preserve-3d]" data-cursor="Approved">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/renders/front-off.webp" alt="Bizmo tablet showing an illustrative home screen with approved business apps" className="relative block w-full select-none" draggable={false} />
+            <img src="/renders/front-off.webp" alt="Bizmo showing an illustrative home screen with approved business apps" className="relative block w-full select-none" draggable={false} />
 
             <div className="absolute overflow-hidden rounded-[0.6%] [container-type:size]" style={SCREEN}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -142,8 +143,8 @@ export default function HomeScreen() {
               <ul className="absolute end-[4cqw] top-[15cqh] grid grid-cols-4 gap-x-[2.6cqw] gap-y-[4.5cqh]">
                 {daily.apps.map((a) => (
                   <li key={a.name} className="group flex w-[8.6cqw] flex-col items-center">
-                    <span className="grid aspect-square w-full place-items-center rounded-[22%] border border-white/25 bg-white/[0.14] font-display text-[3.6cqw] text-white shadow-[0_0.8cqw_2cqw_rgb(0_0_0/0.25)] backdrop-blur-md transition-transform duration-500 group-hover:-translate-y-[0.6cqh] group-hover:bg-white/25">
-                      {a.name === "Phone" ? <PhoneGlyph /> : a.short}
+                    <span className="grid aspect-square w-full place-items-center overflow-hidden rounded-[22%] border border-white/25 bg-white/[0.14] font-display text-[3.6cqw] text-white shadow-[0_0.8cqw_2cqw_rgb(0_0_0/0.25)] backdrop-blur-md transition-transform duration-500 group-hover:-translate-y-[0.6cqh] group-hover:bg-white/25">
+                      <AppIcon icon={a.icon} fallback={a.name === "Phone" ? <PhoneGlyph /> : a.short} />
                     </span>
                     <span className="mt-[1cqh] w-[130%] truncate text-center text-[1.35cqw] text-white/95 [text-shadow:0_1px_4px_rgb(0_0_0/0.5)]">{a.name}</span>
                   </li>

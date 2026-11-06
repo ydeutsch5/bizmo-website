@@ -10,11 +10,11 @@ export default function Compare() {
         <div className="mt-8 grid gap-8 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:items-end md:gap-16">
           <h2 id="compare-title" className="display display-lg text-white" data-reveal-lines>
             <span className="line-mask">
-              <span>One device instead of</span>
+              <span>{compare.title[0]}</span>
             </span>
             <span className="line-mask">
               <span className="text-aluminium/50" style={{ ["--d" as string]: "0.12s" }}>
-                a tablet and a filter.
+                {compare.title[1]}
               </span>
             </span>
           </h2>
@@ -43,7 +43,7 @@ export default function Compare() {
           {/* the Bizmo column is lit from within */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 end-0 w-[39%] rounded-[1.5rem] bg-[linear-gradient(180deg,rgb(4_99_239/0.12),rgb(45_218_255/0.03))] ring-1 ring-cyan/15" />
           <table className="relative w-full border-collapse text-start">
-            <caption className="sr-only">A normal tablet with a filter compared with Bizmo</caption>
+            <caption className="sr-only">An ordinary device with a filter compared with Bizmo</caption>
             <thead>
               <tr>
                 <th scope="col" className="w-[22%] py-7 pe-6 text-start">

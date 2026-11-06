@@ -1,8 +1,9 @@
 "use client";
 
-import ScrollFilm, { type Callout, type Copy } from "./ScrollFilm";
+import ScrollFilm, { type Callout, type Copy, type Screen } from "./ScrollFilm";
+import InsideDiagram from "./InsideDiagram";
 import { easeOut, timeline, type Beat, type ClipId } from "@/lib/film/engine";
-import { camera, explode, hero, layers, trust, turn } from "@/lib/content";
+import { camera, display, explode, hero, layers, trust, turn } from "@/lib/content";
 
 /*
   Camera values: x/y shift the frame centre (fraction of the viewport), s scales it (1 = cover).
@@ -24,8 +25,9 @@ const A = timeline([
   { id: "explode", len: 2.2, layers: [{ clip: "explode", t0: 0, t1: 1 }], cam0: { x: 0.17, y: 0.02, s: 0.88 }, cam1: { x: 0.03, y: 0.0, s: 0.94 } },
   { id: "explode-hold", len: 1.5, layers: [{ clip: "explode", t0: 1 }], cam0: { x: 0.03, y: 0.0, s: 0.94 }, cam1: { x: 0.02, y: 0.0, s: 0.99 }, ease: easeOut },
   { id: "to-layers", len: 0.55, layers: [{ clip: "layers", t0: 0 }, { clip: "explode", t0: 1, a0: 1, a1: 0 }], cam0: { x: 0.02, y: 0.0, s: 0.99 }, cam1: { x: 0.18, y: 0.04, s: 0.88 } },
-  { id: "layers", len: 2.0, layers: [{ clip: "layers", t0: 0, t1: 1 }], cam0: { x: 0.18, y: 0.04, s: 0.88 }, cam1: { x: 0.18, y: 0.04, s: 0.9 } },
-  { id: "layers-hold", len: 1.1, layers: [{ clip: "layers", t0: 1 }], cam0: { x: 0.18, y: 0.04, s: 0.9 }, cam1: { x: 0.18, y: 0.04, s: 0.93 }, ease: easeOut },
+  // the device holds still, screen on, and the in-device filtering diagram is drawn onto the screen (see aScreens)
+  { id: "layers", len: 2.0, layers: [{ clip: "layers", t0: 0 }], cam0: { x: 0.18, y: 0.04, s: 0.88 }, cam1: { x: 0.17, y: 0.03, s: 0.96 } },
+  { id: "layers-hold", len: 1.3, layers: [{ clip: "layers", t0: 0 }], cam0: { x: 0.17, y: 0.03, s: 0.96 }, cam1: { x: 0.17, y: 0.03, s: 0.98 }, ease: easeOut },
 ] satisfies Beat[]);
 
 const aCopy: Copy[] = [
@@ -73,11 +75,7 @@ const aCopy: Copy[] = [
           className="intro-fade mt-auto hidden grid-cols-3 gap-8 border-t border-white/10 pt-5 md:grid [@media(max-height:680px)]:!hidden"
           style={{ ["--d" as string]: "1s" }}
         >
-          {[
-            ["System", "Its own, from its own source code"],
-            ["Apps", "About 190, approved for business"],
-            ["Status", "Entering production"],
-          ].map(([k, v]) => (
+          {hero.facts.map(([k, v]) => (
             <div key={k}>
               <dt className="act">{k}</dt>
               <dd className="mt-2 text-[0.88rem] leading-snug text-aluminium/85">{v}</dd>
@@ -120,17 +118,17 @@ const aCopy: Copy[] = [
     in: A.start("layers") + 0.3,
     out: Infinity,
     className: `${DESK_START} md:top-[max(6rem,calc(50%-17rem))] md:max-w-[30rem]`,
-    still: "layers-last",
+    still: "layers-first",
     node: (
       <div>
-        <p className="act">Locked at the firmware</p>
+        <p className="act">Inside the device</p>
         <h2 className="display display-md mt-4 text-white">{layers.title}</h2>
         <p className="mt-5 text-aluminium/75">{layers.body}</p>
         <ol className="mt-8 border-s border-white/12">
           {layers.stack.map((l, i) => (
             <li
               key={l.id}
-              data-reveal-at={A.start("layers") + 0.55 + (layers.stack.length - 1 - i) * 0.38}
+              data-reveal-at={A.start("layers") + 0.55 + i * 0.38}
               className="relative py-2.5 ps-6 max-md:py-1.5"
               style={{ opacity: 0.18 }}
             >
@@ -154,8 +152,8 @@ const aCallouts: Callout[] = [
     reach: 0.15,
     in: A.start("explode-hold") - 0.15,
     out: A.end("explode-hold") - 0.1,
-    label: `${explode.callouts.processor.label}, 6 nm`,
-    sub: `${explode.callouts.memory.label}, 128 GB UFS storage`,
+    label: explode.callouts.processor.label,
+    sub: explode.callouts.processor.sub,
   },
   {
     id: "camera",
@@ -166,6 +164,7 @@ const aCallouts: Callout[] = [
     in: A.start("explode-hold") + 0.05,
     out: A.end("explode-hold") - 0.1,
     label: explode.callouts.camera.label,
+    sub: explode.callouts.camera.sub,
   },
   {
     id: "display",
@@ -176,13 +175,26 @@ const aCallouts: Callout[] = [
     in: A.start("explode-hold") + 0.25,
     out: A.end("explode-hold") - 0.1,
     label: explode.callouts.display.label,
-    sub: explode.callouts.display.sub,
+  },
+];
+
+/* the screen of the "layers" frame, measured on the frame: left 24.7%, top 18.9%, 45.9% wide, 56.9% tall */
+const aScreens: Screen[] = [
+  {
+    id: "inside",
+    u: 0.247,
+    v: 0.189,
+    w: 0.459,
+    h: 0.569,
+    in: A.start("layers") + 0.05,
+    out: Infinity,
+    node: <InsideDiagram at={A.start("layers") + 0.35} step={0.3} />,
   },
 ];
 
 export function DeviceFilm() {
   return (
-    <ScrollFilm id="system" label="How Bizmo is built" clips={A_CLIPS} tl={A} copy={aCopy} callouts={aCallouts} tail={0.5} glow={{ until: A.start("turn") }} />
+    <ScrollFilm id="system" label="How Bizmo is built" clips={A_CLIPS} tl={A} copy={aCopy} callouts={aCallouts} screens={aScreens} tail={0.5} glow={{ until: A.start("turn") }} />
   );
 }
 
@@ -224,8 +236,8 @@ const bCopy: Copy[] = [
       <div>
         <p className="act">Display</p>
         <h2 className="display display-lg mt-5 text-white">
-          <span className="block">FHD</span>
-          <span className="block text-aluminium/75">1920×1200 IPS.</span>
+          <span className="block">{display.title}</span>
+          <span className="block text-aluminium/75">{display.titleSecond}</span>
         </h2>
       </div>
     ),

@@ -96,7 +96,7 @@
   }
   .display-xxl {
     /* scales with height as well as width, so short screens keep room for the rest of the hero */
-    font-size: clamp(3.2rem, min(8.4vw, 14.5vh), 10.5rem);
+    font-size: clamp(3rem, min(6vw, 12vh), 7.75rem);
     line-height: 0.9;
     letter-spacing: -0.035em;
   }
@@ -351,29 +351,6 @@
   border-color: rgb(45 218 255 / 0.7);
   background: rgb(45 218 255 / 0.06);
 }
-.cursor-ring[data-label="true"] .cursor-ring-inner {
-  width: 84px;
-  height: 84px;
-  margin: -42px 0 0 -42px;
-  background: rgb(16 18 22 / 0.55);
-  backdrop-filter: blur(6px);
-}
-.cursor-label {
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-aluminium);
-  opacity: 0;
-  transform: translateY(14px);
-  transition:
-    opacity 0.4s var(--ease-out-soft),
-    transform 0.4s var(--ease-out-soft);
-}
-.cursor-ring[data-label="true"] .cursor-label {
-  opacity: 1;
-  transform: none;
-}
 
 /* hero headline rises in once the intro has lifted */
 .intro-lines .line-mask > span {
@@ -422,4 +399,47 @@ html[data-intro="done"] .intro-fade {
 }
 .in .strike::after {
   transform: scaleX(1);
+}
+
+/* ---------------------------------------------------------------- legal pages (night edition) */
+.legal {
+  min-height: 100svh;
+  background: var(--color-night);
+  color: var(--color-aluminium);
+}
+.legal-back {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-mist);
+}
+.legal-back:hover {
+  color: #fff;
+}
+.legal-title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2.4rem, 5vw, 3.75rem);
+  line-height: 1.05;
+  color: #fff;
+}
+.legal-meta {
+  font-size: 0.85rem;
+  color: var(--color-mist);
+}
+.legal-intro {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: rgb(228 230 233 / 0.85);
+}
+.legal-h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: #fff;
+}
+.legal-p {
+  line-height: 1.65;
+  color: rgb(228 230 233 / 0.8);
 }

@@ -1,35 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { specs } from "@/lib/content";
 
-function Count({ to }: { to: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  useEffect(() => {
-    const el = ref.current!;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    el.textContent = "0";
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (!e.isIntersecting) return;
-        io.disconnect();
-        const t0 = performance.now();
-        const dur = 1600;
-        const step = (now: number) => {
-          const k = Math.min(1, (now - t0) / dur);
-          el.textContent = String(Math.round(to * (1 - Math.pow(1 - k, 4))));
-          if (k < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      },
-      { threshold: 0.6 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [to]);
-  return <span ref={ref}>{to}</span>;
-}
-
+/* No spec sheet: Bizmo is described in plain words, not numbers. */
 export default function SpecSheet() {
   const [open, setOpen] = useState<number | null>(0);
   return (
@@ -49,17 +23,28 @@ export default function SpecSheet() {
         <dl className="mt-16 grid grid-cols-2 border-y border-white/10 md:mt-24 md:grid-cols-4">
           {specs.stats.map((s, i) => (
             <div key={s.label} className={`px-1 py-10 md:px-8 md:py-14 ${i % 2 ? "border-s border-white/10" : ""} ${i > 0 ? "md:border-s md:border-white/10" : ""} ${i < 2 ? "max-md:border-b max-md:border-white/10" : ""}`} data-reveal style={{ ["--d" as string]: `${i * 0.1}s` }}>
-              <dd className="font-display text-[clamp(3.5rem,7vw,7rem)] leading-none font-light text-white tabular-nums">
-                <Count to={s.value} />
-                <span className="ms-2 font-sans text-[0.22em] font-normal tracking-[0.04em] text-mist">{s.unit}</span>
-              </dd>
-              <dt className="mt-4 text-[0.88rem] text-mist">{s.label}</dt>
+              <dd className="font-display text-[clamp(2.4rem,4.2vw,4.25rem)] leading-none font-light text-white">{s.value}</dd>
+              <dt className="mt-4 text-[0.95rem] text-mist">{s.label}</dt>
             </div>
           ))}
         </dl>
 
+        {/* wherever work takes you: international, eSIM, Android Auto */}
+        <div className="mt-16 grid gap-10 md:mt-24 md:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] md:gap-20" data-reveal>
+          <h3 className="display display-md text-white">{specs.extras.title}</h3>
+          <ul className="grid gap-4 sm:grid-cols-3">
+            {specs.extras.items.map((it, i) => (
+              <li key={it.k} className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-6" data-reveal style={{ ["--d" as string]: `${i * 0.08}s` }}>
+                <span aria-hidden="true" className="mb-5 block h-2 w-2 rounded-full bg-gradient-to-tr from-cobalt to-cyan shadow-[0_0_10px_rgb(45_218_255/0.8)]" />
+                <p className="font-display text-[1.45rem] leading-tight text-white">{it.k}</p>
+                <p className="mt-3 text-[0.92rem] leading-snug text-mist">{it.v}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <div className="mt-16 grid gap-10 md:mt-24 md:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] md:gap-20">
-          <p className="act">Full list</p>
+          <p className="act">In plain words</p>
           <ul className="border-t border-white/10">
             {specs.rows.map((r, i) => {
               const on = open === i;

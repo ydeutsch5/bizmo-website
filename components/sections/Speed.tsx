@@ -46,7 +46,8 @@ export default function Speed() {
       raf = 0;
       const r = el.getBoundingClientRect();
       const vh = window.innerHeight;
-      const p = reduced ? 1 : clamp01((vh * 0.8 - r.top) / (r.height * 0.75));
+      // starts when the diagram is well into view (not as soon as it peeks in), and finishes before it leaves
+      const p = reduced ? 1 : clamp01((vh * 0.55 - r.top) / (r.height * 0.6));
       const f = ease(p / 0.38); // Bizmo: straight there
       const s = p < 0.42 ? ease(p / 0.42) * 0.5 : p < 0.62 ? 0.5 : 0.5 + ease((p - 0.62) / 0.38) * 0.5; // filter: to the server, a wait, then on
       const sPt = sp.getPointAtLength(s * sl);
@@ -94,11 +95,11 @@ export default function Speed() {
           </p>
           <h2 id="speed-title" className="display display-xl mt-8 text-white" data-reveal-lines>
             <span className="line-mask">
-              <span>Native speed.</span>
+              <span>{speed.title.split(" ").slice(0, 2).join(" ")}</span>
             </span>
             <span className="line-mask">
               <span className="text-aluminium/50" style={{ ["--d" as string]: "0.12s" }}>
-                No proxy.
+                {speed.title.split(" ").slice(2).join(" ")}
               </span>
             </span>
           </h2>
@@ -109,7 +110,7 @@ export default function Speed() {
 
         <figure className="relative" dir="ltr">
           <svg viewBox={`0 0 ${VW} 420`} className="h-auto w-full overflow-visible" role="img" aria-labelledby="speed-diagram-title">
-            <title id="speed-diagram-title">A tablet with a filter routes traffic through a filter server before it reaches your apps. Bizmo connects directly.</title>
+            <title id="speed-diagram-title">An ordinary device with a filter routes traffic through a filter server before it reaches your apps. Bizmo connects directly.</title>
             <defs>
               <linearGradient id="spd-dot" gradientUnits="userSpaceOnUse" x1={a} y1="0" x2={b} y2="0">
                 <stop offset="0" stopColor="#0463EF" />

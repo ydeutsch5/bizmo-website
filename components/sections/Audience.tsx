@@ -11,11 +11,11 @@ export default function Audience() {
           </p>
           <h2 id="who-title" className="display display-lg mt-8 text-white" data-reveal-lines>
             <span className="line-mask">
-              <span>For people who already</span>
+              <span>{audience.title[0]}</span>
             </span>
             <span className="line-mask">
               <span className="text-aluminium/50" style={{ ["--d" as string]: "0.12s" }}>
-                work on a tablet.
+                {audience.title[1]}
               </span>
             </span>
           </h2>
@@ -34,7 +34,7 @@ export default function Audience() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/renders/front-back.webp"
-            alt="Bizmo tablet, front and back. The screen shows the official beach wallpaper; the back carries the engraved bizmo logo."
+            alt="Bizmo, front and back. The screen shows the official beach wallpaper; the back carries the engraved bizmo logo."
             loading="lazy"
             className="relative w-full drop-shadow-[0_50px_60px_rgb(0_0_0/0.6)]"
           />

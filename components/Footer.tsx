@@ -1,4 +1,4 @@
-import { footer, nav, site } from "@/lib/content";
+import { footer, legalNav, nav, site } from "@/lib/content";
 
 export default function Footer() {
   return (
@@ -30,6 +30,15 @@ export default function Footer() {
         <p>
           {footer.legal}. {site.category}.
         </p>
+        <ul className="flex flex-wrap gap-x-5 gap-y-1">
+          {legalNav.map((n) => (
+            <li key={n.href}>
+              <a href={n.href} className="hover:text-white">
+                {n.label}
+              </a>
+            </li>
+          ))}
+        </ul>
         <p>{footer.note}</p>
       </div>
     </footer>
