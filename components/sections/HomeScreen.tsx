@@ -111,11 +111,11 @@ export default function HomeScreen() {
         <div ref={stage} className="relative mx-auto mt-16 max-w-[1180px] [perspective:2200px] md:mt-24" data-reveal style={{ ["--d" as string]: "0.15s" }}>
           <div ref={device} className="relative transition-transform duration-[60ms] [transform-style:preserve-3d]" data-cursor="Approved">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/renders/front-off.webp" alt="Bizmo showing an illustrative home screen with approved business apps" className="relative block w-full select-none" draggable={false} />
+            <img src="/renders/front-off.webp" alt="Bizmo showing an illustrative home screen with approved business apps" width={1800} height={1172} className="relative block h-auto w-full select-none" draggable={false} />
 
             <div className="absolute overflow-hidden rounded-[0.6%] [container-type:size]" style={SCREEN}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/wallpaper.webp" alt="" className="absolute inset-0 h-full w-full object-cover" />
+              <img src="/brand/wallpaper.webp" alt="" width={1440} height={900} className="absolute inset-0 h-full w-full object-cover" />
               <div className="absolute inset-0 bg-[linear-gradient(90deg,rgb(8_10_14/0.55),rgb(8_10_14/0.1)_55%,rgb(8_10_14/0.25))]" />
 
               {/* status bar */}
@@ -132,7 +132,7 @@ export default function HomeScreen() {
 
               {/* clock */}
               <div className="absolute start-[5cqw] top-[16cqh] text-white">
-                <p className="font-display text-[13cqw] leading-[0.85] font-light tracking-[-0.03em]">
+                <p className="font-display text-[12cqw] leading-[0.9] font-semibold tracking-[-0.04em]">
                   {time || " "}
                   <span className="ms-[1cqw] align-top font-sans text-[2.2cqw] font-normal tracking-normal text-white/80">{ampm}</span>
                 </p>

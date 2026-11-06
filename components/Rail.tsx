@@ -54,7 +54,7 @@ export default function Rail() {
                 href={`#${a.id}`}
                 data-cursor={a.label}
                 aria-current={i === active ? "step" : undefined}
-                className={`group flex items-center gap-3 font-mono text-[0.62rem] tracking-[0.2em] transition-colors duration-500 ${i === active ? "text-aluminium" : "text-dim hover:text-mist"}`}
+                className={`group flex items-center gap-3 text-[0.66rem] font-medium tracking-[0.18em] transition-colors duration-500 ${i === active ? "text-aluminium" : "text-dim hover:text-mist"}`}
               >
                 <span className="translate-x-1 whitespace-nowrap opacity-0 transition-[opacity,transform] duration-500 group-hover:translate-x-0 group-hover:opacity-100">{a.label}</span>
                 <span className="w-7 text-end">{a.n}</span>

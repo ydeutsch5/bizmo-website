@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="wrap flex flex-col gap-10 border-t border-white/[0.07] py-14 md:flex-row md:items-end md:justify-between">
         <div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/bizmo-wordmark-white.svg" alt="Bizmo" className="h-7 w-auto" />
+          <img src="/brand/bizmo-wordmark-white.svg" alt="Bizmo" width={95} height={28} className="h-7 w-auto" />
           <p className="mt-5 max-w-[24rem] text-[0.95rem]">{footer.line}</p>
         </div>
         <nav aria-label="Footer">

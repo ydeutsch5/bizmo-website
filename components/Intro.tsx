@@ -75,11 +75,11 @@ export default function Intro() {
     >
       <div className={`flex flex-col items-center transition-opacity duration-500 ${phase === "leaving" ? "opacity-0" : "opacity-100"}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/bizmo-wordmark-white.svg" alt="" className="h-9 w-auto md:h-11" />
+        <img src="/brand/bizmo-wordmark-white.svg" alt="" width={122} height={36} className="h-9 w-auto md:h-11" />
         <div className="mt-10 h-px w-44 overflow-hidden bg-white/10">
           <div ref={line} className="h-full origin-left bg-gradient-to-r from-cobalt to-cyan" style={{ transform: "scaleX(0)" }} />
         </div>
-        <span ref={count} className="mt-4 font-mono text-[0.65rem] tracking-[0.3em] text-mist">
+        <span ref={count} className="mt-4 text-[0.68rem] font-medium tracking-[0.24em] text-mist">
           000
         </span>
       </div>

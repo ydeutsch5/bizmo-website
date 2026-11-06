@@ -17,7 +17,114 @@ type Props = {
 const W = 760;
 const H = 480;
 
-export default function InsideDiagram({ at, step = 0.28 }: Props) {
+export default function InsideDiagram(props: Props) {
+  return (
+    <>
+      <div className="h-full w-full max-lg:hidden">
+        <Wide {...props} />
+      </div>
+      <div className="h-full w-full lg:hidden">
+        <Compact {...props} />
+      </div>
+    </>
+  );
+}
+
+/* Phone: three apps, the filter, the internet. Big type, nothing that needs squinting. */
+function Compact({ at, step = 0.28 }: Props) {
+  const d = layers.diagram;
+  const tiles = d.apps.slice(0, 3);
+  const r = (i: number) => at + i * step;
+  const tileW = 230;
+  const tileH = 76;
+  const gap = 26;
+  const stackH = tiles.length * tileH + (tiles.length - 1) * gap;
+  const top = 66;
+  const tileX = 48;
+  const bandX = 372;
+  const bandW = 96;
+  const bandY = top - 10;
+  const bandH = stackH + 20;
+  const outX = 630;
+  const cy = top + stackH / 2;
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="h-full w-full" style={{ fontFamily: "var(--font-sans)" }}>
+      <defs>
+        <linearGradient id="idc-band" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#2DDAFF" />
+          <stop offset="1" stopColor="#0463EF" />
+        </linearGradient>
+        <radialGradient id="idc-glow">
+          <stop offset="0" stopColor="#2DDAFF" stopOpacity="0.5" />
+          <stop offset="1" stopColor="#2DDAFF" stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id="idc-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#13161b" />
+          <stop offset="1" stopColor="#0b0d11" />
+        </linearGradient>
+      </defs>
+      <rect width={W} height={H} fill="url(#idc-bg)" />
+      <g data-reveal-at={r(1)} style={{ opacity: 0 }}>
+        {tiles.map((_, i) => {
+          const y = top + i * (tileH + gap) + tileH / 2;
+          const x0 = tileX + tileW;
+          const path = `M ${x0} ${y} C ${x0 + 50} ${y}, ${bandX - 50} ${cy}, ${bandX} ${cy + (y - cy) * 0.3}`;
+          return (
+            <g key={i}>
+              <path d={path} fill="none" stroke="rgb(228 230 233 / 0.25)" strokeWidth="3" />
+              <circle r="7" fill="#e4e6e9">
+                <animateMotion dur={`${2.4 + i * 0.4}s`} repeatCount="indefinite" path={path} begin={`${i * 0.5}s`} />
+              </circle>
+            </g>
+          );
+        })}
+      </g>
+      <g data-reveal-at={r(2)} style={{ opacity: 0 }}>
+        <rect x={bandX - 70} y={bandY - 70} width={bandW + 140} height={bandH + 140} rx="140" fill="url(#idc-glow)" />
+        <rect x={bandX} y={bandY} width={bandW} height={bandH} rx="24" fill="url(#idc-band)" />
+        {[0, 1, 2, 3].map((i) => (
+          <line key={i} x1={bandX + 26} x2={bandX + bandW - 26} y1={bandY + 36 + i * ((bandH - 72) / 3)} y2={bandY + 36 + i * ((bandH - 72) / 3)} stroke="rgb(255 255 255 / 0.55)" strokeWidth="3" strokeLinecap="round" />
+        ))}
+        <text x={bandX + bandW / 2} y={bandY + bandH + 46} textAnchor="middle" fontSize="34" fontWeight="600" fill="#ffffff">
+          {d.filter}
+        </text>
+      </g>
+      <g data-reveal-at={r(3)} style={{ opacity: 0 }}>
+        <path d={`M ${bandX + bandW} ${cy} L ${outX - 56} ${cy}`} fill="none" stroke="url(#idc-band)" strokeWidth="4" />
+        <circle r="8" fill="#2DDAFF">
+          <animateMotion dur="1.6s" repeatCount="indefinite" path={`M ${bandX + bandW} ${cy} L ${outX - 56} ${cy}`} />
+        </circle>
+        <circle cx={outX} cy={cy} r="52" fill="none" stroke="rgb(228 230 233 / 0.4)" strokeWidth="3" />
+        <ellipse cx={outX} cy={cy} rx="22" ry="52" fill="none" stroke="rgb(228 230 233 / 0.4)" strokeWidth="3" />
+        <line x1={outX - 52} x2={outX + 52} y1={cy} y2={cy} stroke="rgb(228 230 233 / 0.4)" strokeWidth="3" />
+        <text x={outX} y={cy + 92} textAnchor="middle" fontSize="30" fill="#e4e6e9">
+          {d.out}
+        </text>
+      </g>
+      <g data-reveal-at={r(0)} style={{ opacity: 0 }}>
+        {tiles.map((t, i) => {
+          const y = top + i * (tileH + gap);
+          return (
+            <g key={t}>
+              <rect x={tileX} y={y} width={tileW} height={tileH} rx="20" fill="rgb(255 255 255 / 0.1)" stroke="rgb(255 255 255 / 0.22)" strokeWidth="2" />
+              <rect x={tileX + 16} y={y + 16} width={44} height={44} rx="12" fill="rgb(255 255 255 / 0.85)" />
+              <text x={tileX + 80} y={y + 50} fontSize="32" fontWeight="500" fill="#ffffff">
+                {t}
+              </text>
+            </g>
+          );
+        })}
+      </g>
+      <g data-reveal-at={r(4)} style={{ opacity: 0 }}>
+        <text x={W / 2} y={H - 22} textAnchor="middle" fontSize="30" fontWeight="500" fill="#ffffff">
+          {d.note}
+        </text>
+      </g>
+    </svg>
+  );
+}
+
+function Wide({ at, step = 0.28 }: Props) {
   const d = layers.diagram;
   const tiles = d.apps;
   const tileH = 54;

@@ -19,7 +19,15 @@ export type Manifest = {
 };
 
 /** Virtual camera. x/y move the frame centre (fraction of viewport), s scales it (1 = cover). */
-export type Cam = { x: number; y: number; s: number };
+export type Cam = {
+  x: number;
+  y: number;
+  s: number;
+  /** phone only: vertical centre of the frame as a fraction of the viewport (default 0.36) */
+  my?: number;
+  /** phone only: scale used instead of s */
+  ms?: number;
+};
 
 /** A picture layer inside a beat. `t` runs 0..1 through the clip; "loop" plays by wall-clock time. */
 export type Layer = {
@@ -74,7 +82,7 @@ export function timeline(beats: Beat[]) {
     const raw = b.len ? (p - starts[i]) / b.len : 1;
     const k = (b.ease ?? easeInOut)(raw);
     const c1 = b.cam1 ?? b.cam0;
-    const cam: Cam = { x: lerp(b.cam0.x, c1.x, k), y: lerp(b.cam0.y, c1.y, k), s: lerp(b.cam0.s, c1.s, k) };
+    const cam: Cam = { x: lerp(b.cam0.x, c1.x, k), y: lerp(b.cam0.y, c1.y, k), s: lerp(b.cam0.s, c1.s, k), my: lerp(b.cam0.my ?? 0.36, c1.my ?? 0.36, k), ms: lerp(b.cam0.ms ?? b.cam0.s, c1.ms ?? c1.s, k) };
     return { beat: b, raw: clamp01(raw), k, cam };
   }
   return { beats, total, start, end, at };
@@ -248,9 +256,9 @@ export function placement(view: View, fw: number, fh: number, cam: Cam) {
   let cx: number;
   let cy: number;
   if (mobile) {
-    scale = (W / fw) * 1.42 * cam.s;
+    scale = (W / fw) * 1.42 * (cam.ms ?? cam.s);
     cx = W / 2;
-    cy = H * 0.36 + cam.y * H * 0.3;
+    cy = H * (cam.my ?? 0.36) + cam.y * H * 0.3;
   } else {
     scale = Math.max(W / fw, H / fh) * cam.s;
     cx = W / 2 + cam.x * W;

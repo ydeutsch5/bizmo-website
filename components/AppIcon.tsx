@@ -18,6 +18,8 @@ export default function AppIcon({ icon, fallback, className = "" }: { icon?: str
     <img
       src={`/apps/${icon}.${ICON_EXT}`}
       alt=""
+      width={256}
+      height={256}
       draggable={false}
       onError={() => setOk(false)}
       className={`block h-full w-full object-cover ${className}`}

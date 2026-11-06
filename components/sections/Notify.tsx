@@ -68,7 +68,7 @@ export default function Notify() {
           {state === "done" ? (
             <div role="status" className="border-t border-white/15 pt-8">
               <span aria-hidden="true" className="mb-6 block h-2.5 w-2.5 rounded-full bg-gradient-to-tr from-cobalt to-cyan" />
-              <p className="font-display text-[1.75rem] leading-snug text-white">{notify.done(firstName)}</p>
+              <p className="font-display text-[1.4rem] leading-snug font-semibold tracking-[-0.02em] text-white">{notify.done(firstName)}</p>
             </div>
           ) : (
             <form noValidate onSubmit={onSubmit} className="grid gap-7">

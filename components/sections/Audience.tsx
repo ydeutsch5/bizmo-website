@@ -24,7 +24,7 @@ export default function Audience() {
           </p>
           <ul className="mt-12 grid grid-cols-2 border-t border-white/10">
             {audience.roles.map((r, i) => (
-              <li key={r} className="border-b border-white/10 py-4 pe-4 font-display text-[1.3rem] font-light text-aluminium" data-reveal style={{ ["--d" as string]: `${i * 0.06}s` }}>
+              <li key={r} className="border-b border-white/10 py-4 pe-4 font-display text-[1.1rem] font-semibold tracking-[-0.02em] text-aluminium" data-reveal style={{ ["--d" as string]: `${i * 0.06}s` }}>
                 {r}
               </li>
             ))}
@@ -36,7 +36,9 @@ export default function Audience() {
             src="/renders/front-back.webp"
             alt="Bizmo, front and back. The screen shows the official beach wallpaper; the back carries the engraved bizmo logo."
             loading="lazy"
-            className="relative w-full drop-shadow-[0_50px_60px_rgb(0_0_0/0.6)]"
+            width={1500}
+            height={1594}
+            className="relative h-auto w-full drop-shadow-[0_50px_60px_rgb(0_0_0/0.6)]"
           />
         </div>
       </div>

@@ -121,7 +121,8 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
     const resize = () => {
       const W = stage.clientWidth;
       const H = stage.clientHeight;
-      view = { W, H, mobile: W < 768 && H > W };
+      // portrait phones and tablets get the stacked layout (device on top, copy below); matches the lg: breakpoint
+      view = { W, H, mobile: W < 1024 && H > W };
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(W * dpr);
       canvas.height = Math.round(H * dpr);
@@ -309,14 +310,14 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
         {scrim !== "none" && (
           <div aria-hidden="true" className="pointer-events-none absolute inset-0">
             <div
-              className={`absolute inset-y-0 start-0 hidden md:block ${
+              className={`absolute inset-y-0 start-0 hidden lg:block ${
                 scrim === "strong"
                   ? "w-[68%] bg-[linear-gradient(to_right,rgb(16_18_22/0.96),rgb(16_18_22/0.82)_40%,transparent)] rtl:bg-[linear-gradient(to_left,rgb(16_18_22/0.96),rgb(16_18_22/0.82)_40%,transparent)]"
                   : "w-[52%] bg-[linear-gradient(to_right,rgb(16_18_22/0.88),rgb(16_18_22/0.55)_45%,transparent)] rtl:bg-[linear-gradient(to_left,rgb(16_18_22/0.88),rgb(16_18_22/0.55)_45%,transparent)]"
               }`}
             />
-            {scrim === "both" && <div className="absolute inset-y-0 end-0 hidden w-[40%] bg-[linear-gradient(to_left,rgb(16_18_22/0.8),transparent)] md:block" />}
-            <div className="absolute inset-x-0 bottom-0 h-[58%] bg-[linear-gradient(to_top,rgb(16_18_22/0.97)_30%,rgb(16_18_22/0.6)_65%,transparent)] md:h-40 md:bg-[linear-gradient(to_top,rgb(16_18_22/0.7),transparent)]" />
+            {scrim === "both" && <div className="absolute inset-y-0 end-0 hidden w-[40%] bg-[linear-gradient(to_left,rgb(16_18_22/0.8),transparent)] lg:block" />}
+            <div className="absolute inset-x-0 bottom-0 h-[58%] bg-[linear-gradient(to_top,rgb(16_18_22/0.97)_30%,rgb(16_18_22/0.6)_65%,transparent)] lg:h-40 lg:bg-[linear-gradient(to_top,rgb(16_18_22/0.7),transparent)]" />
             <div className="absolute inset-x-0 top-0 h-32 bg-[linear-gradient(to_bottom,rgb(16_18_22/0.7),transparent)]" />
           </div>
         )}
@@ -345,7 +346,7 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
 
         <div className="absolute inset-0">
           {copy.map((c) => (
-            <div key={c.id} data-copy={c.id} className={`film-copy max-md:inset-x-5 max-md:bottom-[max(2.25rem,env(safe-area-inset-bottom))] ${c.className}`}>
+            <div key={c.id} data-copy={c.id} className={`film-copy max-lg:inset-x-5 max-lg:bottom-[max(2.25rem,env(safe-area-inset-bottom))] ${c.className}`}>
               {c.node}
             </div>
           ))}
@@ -363,12 +364,12 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
 
 function StaticFilm({ id, label, copy, callouts = [] }: FilmProps) {
   return (
-    <section id={id} aria-label={label} className="static-film bg-graphite py-20 md:py-28">
-      <div className="wrap flex flex-col gap-20 md:gap-28">
+    <section id={id} aria-label={label} className="static-film bg-graphite py-20 lg:py-28">
+      <div className="wrap flex flex-col gap-20 lg:gap-28">
         {copy.map((c) => {
           const notes = callouts.filter((k) => k.in >= c.in - 0.01 && k.in < c.out);
           return (
-            <div key={c.id} className="grid items-center gap-8 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-14">
+            <div key={c.id} className="grid items-center gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-14">
               <div className="max-w-xl">
                 {c.node}
                 {notes.length > 0 && (
@@ -383,7 +384,7 @@ function StaticFilm({ id, label, copy, callouts = [] }: FilmProps) {
                 )}
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`/film/stills/${c.still}.webp`} alt="" loading="lazy" className="w-full rounded-[1.25rem]" />
+              <img src={`/film/stills/${c.still}.webp`} alt="" loading="lazy" width={1600} height={900} className="h-auto w-full rounded-[1.25rem]" />
             </div>
           );
         })}

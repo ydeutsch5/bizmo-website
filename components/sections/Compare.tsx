@@ -27,7 +27,7 @@ export default function Compare() {
           {compare.rows.map(([k, a, b]) => (
             <div key={k} className="border-b border-white/10 py-5">
               <dt className="act">{k}</dt>
-              <dd className="mt-2 font-display text-[1.45rem] leading-snug font-light text-white">
+              <dd className="mt-2 font-display text-[1.2rem] leading-snug font-semibold tracking-[-0.02em] text-white">
                 <span className="sr-only">Bizmo: </span>
                 {b}
               </dd>
@@ -54,7 +54,7 @@ export default function Compare() {
                 </th>
                 <th scope="col" className="w-[39%] px-8 py-7 text-start">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/brand/bizmo-wordmark-white.svg" alt="Bizmo" className="h-6 w-auto" />
+                  <img src="/brand/bizmo-wordmark-white.svg" alt="Bizmo" width={82} height={24} className="h-6 w-auto" />
                 </th>
               </tr>
             </thead>
@@ -65,7 +65,7 @@ export default function Compare() {
                     {k}
                   </th>
                   <td className="py-7 pe-6 text-[1.02rem] text-mist">{a}</td>
-                  <td className="px-8 py-7 font-display text-[1.55rem] leading-snug font-light text-white">{b}</td>
+                  <td className="px-8 py-7 font-display text-[1.25rem] leading-snug font-semibold tracking-[-0.02em] text-white">{b}</td>
                 </tr>
               ))}
             </tbody>

@@ -66,7 +66,7 @@ function Marquee() {
                 {row.map((name) => (
                   <span key={name + dup} className="flex items-center">
                     <span
-                      className={`px-5 font-display text-[clamp(2rem,4.6vw,4.75rem)] leading-none font-light whitespace-nowrap transition-colors duration-500 hover:text-white md:px-8 ${
+                      className={`px-5 font-display text-[clamp(1.6rem,3.6vw,3.75rem)] leading-none font-semibold tracking-[-0.03em] whitespace-nowrap transition-colors duration-500 hover:text-white md:px-8 ${
                         i === 1 ? "text-aluminium/30" : "text-aluminium/55"
                       } group-hover/marquee:text-aluminium/25 hover:!text-white`}
                     >
@@ -164,7 +164,7 @@ export default function Apps() {
           </div>
 
           <div id="apps-panel" role="tabpanel" aria-labelledby={`tab-${cat.id}`} className="min-h-[24rem] md:pt-12">
-            <p className="font-display text-[clamp(2.2rem,4vw,3.5rem)] leading-none font-light text-white">{cat.name}</p>
+            <p className="font-display text-[clamp(1.8rem,3vw,2.75rem)] leading-none font-semibold tracking-[-0.03em] text-white">{cat.name}</p>
             <p className="mt-3 text-[0.95rem] text-mist">Approved apps include</p>
             <ul key={cat.id} className="apps-list mt-8 columns-1 gap-10 sm:columns-2 lg:columns-3">
               {cat.apps.map((a, i) => (

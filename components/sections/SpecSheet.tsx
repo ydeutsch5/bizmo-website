@@ -20,10 +20,10 @@ export default function SpecSheet() {
           </p>
         </div>
 
-        <dl className="mt-16 grid grid-cols-2 border-y border-white/10 md:mt-24 md:grid-cols-4">
+        <dl className="mt-16 grid grid-cols-2 border-y border-white/10 md:mt-24 lg:grid-cols-4">
           {specs.stats.map((s, i) => (
-            <div key={s.label} className={`px-1 py-10 md:px-8 md:py-14 ${i % 2 ? "border-s border-white/10" : ""} ${i > 0 ? "md:border-s md:border-white/10" : ""} ${i < 2 ? "max-md:border-b max-md:border-white/10" : ""}`} data-reveal style={{ ["--d" as string]: `${i * 0.1}s` }}>
-              <dd className="font-display text-[clamp(2.4rem,4.2vw,4.25rem)] leading-none font-light text-white">{s.value}</dd>
+            <div key={s.label} className={`px-1 py-10 md:px-8 md:py-14 ${i % 2 ? "border-s border-white/10" : ""} ${i > 0 ? "lg:border-s lg:border-white/10" : ""} ${i < 2 ? "max-lg:border-b max-lg:border-white/10" : ""}`} data-reveal style={{ ["--d" as string]: `${i * 0.1}s` }}>
+              <dd className="font-display text-[clamp(2rem,3.4vw,3.5rem)] leading-none font-semibold tracking-[-0.03em] text-white">{s.value}</dd>
               <dt className="mt-4 text-[0.95rem] text-mist">{s.label}</dt>
             </div>
           ))}
@@ -36,7 +36,7 @@ export default function SpecSheet() {
             {specs.extras.items.map((it, i) => (
               <li key={it.k} className="rounded-[1.25rem] border border-white/10 bg-white/[0.03] p-6" data-reveal style={{ ["--d" as string]: `${i * 0.08}s` }}>
                 <span aria-hidden="true" className="mb-5 block h-2 w-2 rounded-full bg-gradient-to-tr from-cobalt to-cyan shadow-[0_0_10px_rgb(45_218_255/0.8)]" />
-                <p className="font-display text-[1.45rem] leading-tight text-white">{it.k}</p>
+                <p className="font-display text-[1.25rem] leading-tight font-semibold tracking-[-0.02em] text-white">{it.k}</p>
                 <p className="mt-3 text-[0.92rem] leading-snug text-mist">{it.v}</p>
               </li>
             ))}
@@ -59,7 +59,7 @@ export default function SpecSheet() {
                       data-cursor={on ? "Close" : "Open"}
                       className="flex w-full items-center justify-between gap-6 py-6 text-start"
                     >
-                      <span className={`font-display text-[clamp(1.5rem,2.4vw,2.25rem)] font-light transition-colors duration-500 ${on ? "text-white" : "text-aluminium/70"}`}>{r.k}</span>
+                      <span className={`font-display text-[clamp(1.25rem,1.9vw,1.75rem)] font-semibold tracking-[-0.02em] transition-colors duration-500 ${on ? "text-white" : "text-aluminium/70"}`}>{r.k}</span>
                       <span aria-hidden="true" className="relative h-4 w-4 shrink-0">
                         <span className="absolute top-1/2 left-0 h-px w-4 bg-aluminium/70" />
                         <span className={`absolute top-0 left-1/2 h-4 w-px bg-aluminium/70 transition-transform duration-500 ${on ? "scale-y-0" : ""}`} />
