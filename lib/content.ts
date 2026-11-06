@@ -156,19 +156,19 @@ export const apps = {
 export const daily = {
   title: ["The apps you work with.", "Nothing you never asked for."],
   body: "Banking, invoicing, signatures, phone-over-internet, navigation and security cameras. Bizmo runs the business apps you already use, with zero distractions.",
-  caption: "Illustration. The final screen may differ.",
+  caption: "Illustration. The final screen may differ. App icons are trademarks of their owners.",
   apps: [
     { name: "Chase", short: "C", icon: "chase" },
     { name: "QuickBooks", short: "Q", icon: "quickbooks" },
     { name: "Docusign", short: "D", icon: "docusign" },
     { name: "Zoom", short: "Z", icon: "zoom" },
-    { name: "RingCentral", short: "R", icon: "ringcentral" },
+    { name: "Teams", short: "T", icon: "microsoft-teams" },
     { name: "Google Sheets", short: "S", icon: "google-sheets" },
     { name: "Microsoft Word", short: "W", icon: "microsoft-word" },
     { name: "Square", short: "S", icon: "square" },
     { name: "Waze", short: "W", icon: "waze" },
     { name: "Ring", short: "R", icon: "ring" },
-    { name: "E-ZPass", short: "E", icon: "e-zpass" },
+    { name: "Dropbox", short: "D", icon: "dropbox" },
     { name: "Phone", short: "", icon: "phone" },
   ],
 };
