@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
-import { apps } from "@/lib/content";
+import { appSlug, apps } from "@/lib/content";
+import AppIcon from "@/components/AppIcon";
 
 /** Three rows of approved app names drifting in alternate directions; scrolling speeds them up. */
 function Marquee() {
@@ -168,7 +169,10 @@ export default function Apps() {
             <p className="mt-3 text-[0.95rem] text-mist">Approved apps include</p>
             <ul key={cat.id} className="apps-list mt-8 columns-1 gap-10 sm:columns-2 lg:columns-3">
               {cat.apps.map((a, i) => (
-                <li key={a} className="break-inside-avoid border-t border-white/[0.07] py-2.5 text-[1.05rem] text-aluminium/90" style={{ animationDelay: `${i * 25}ms` }}>
+                <li key={a} className="flex break-inside-avoid items-center gap-3 border-t border-white/[0.07] py-2 text-[1.05rem] text-aluminium/90" style={{ animationDelay: `${i * 25}ms` }}>
+                  <span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center overflow-hidden rounded-[22%] border border-white/10 bg-white/[0.06] text-[0.7rem] font-medium text-aluminium/70">
+                    <AppIcon icon={appSlug(a)} fallback={a[0]} />
+                  </span>
                   {a}
                 </li>
               ))}

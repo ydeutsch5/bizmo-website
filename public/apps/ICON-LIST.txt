@@ -1,0 +1,109 @@
+App name	File name (square PNG, 256px or larger, put in public/apps/)
+Chase Mobile	chase-mobile.png
+Amex	amex.png
+Bank of America	bank-of-america.png
+Wells Fargo	wells-fargo.png
+Citi Mobile	citi-mobile.png
+Capital One	capital-one.png
+TD Bank	td-bank.png
+U.S. Bank	u-s-bank.png
+M&T Mobile Banking	m-and-t-mobile-banking.png
+Santander	santander.png
+KeyBank	keybank.png
+Navy Federal	navy-federal.png
+USAA	usaa.png
+Merrill Edge	merrill-edge.png
+E*TRADE	e-trade.png
+thinkorswim	thinkorswim.png
+Marcus by Goldman Sachs	marcus-by-goldman-sachs.png
+T. Rowe Price	t-rowe-price.png
+BMO	bmo.png
+CIBC	cibc.png
+Scotiabank	scotiabank.png
+Bank Hapoalim	bank-hapoalim.png
+Leumi	leumi.png
+Bank Yahav	bank-yahav.png
+The OJC Fund	the-ojc-fund.png
+Microsoft Word	microsoft-word.png
+Microsoft Excel	microsoft-excel.png
+Microsoft PowerPoint	microsoft-powerpoint.png
+Microsoft OneDrive	microsoft-onedrive.png
+Google Drive	google-drive.png
+Google Sheets	google-sheets.png
+Docusign	docusign.png
+Adobe Fill & Sign	adobe-fill-and-sign.png
+Dropbox	dropbox.png
+Evernote	evernote.png
+Asana	asana.png
+Smartsheet	smartsheet.png
+Zendesk	zendesk.png
+Mailchimp	mailchimp.png
+Genius Scan	genius-scan.png
+Buildium	buildium.png
+Zola Suite	zola-suite.png
+QuickBooks Online	quickbooks-online.png
+Square Point of Sale	square-point-of-sale.png
+Cardknox Payments	cardknox-payments.png
+Fingercheck	fingercheck.png
+TSheets	tsheets.png
+Timesheet	timesheet.png
+Eastern Union Mortgage Calculator	eastern-union-mortgage-calculator.png
+Zoom Workplace	zoom-workplace.png
+Microsoft Teams	microsoft-teams.png
+Slack	slack.png
+Google Chat	google-chat.png
+RingCentral	ringcentral.png
+3CX	3cx.png
+Phone.com	phone-com.png
+Talkroute	talkroute.png
+Zoiper	zoiper.png
+Grandstream Wave	grandstream-wave.png
+Jivetel	jivetel.png
+Mongotel	mongotel.png
+Microsoft Authenticator	microsoft-authenticator.png
+Google Authenticator	google-authenticator.png
+Duo Mobile	duo-mobile.png
+Okta Verify	okta-verify.png
+1Password	1password.png
+LastPass	lastpass.png
+RSA SecurID	rsa-securid.png
+FortiToken	fortitoken.png
+Intune Company Portal	intune-company-portal.png
+Ring	ring.png
+Arlo	arlo.png
+Blink	blink.png
+ADT Control	adt-control.png
+Hik-Connect	hik-connect.png
+Reolink	reolink.png
+UniFi	unifi.png
+eufy Security	eufy-security.png
+Schlage Home	schlage-home.png
+ecobee	ecobee.png
+Total Connect 2.0	total-connect-2-0.png
+DoorBird	doorbird.png
+Night Owl	night-owl.png
+Waze	waze.png
+Moovit	moovit.png
+E-ZPass NY	e-zpass-ny.png
+The Official MTA App	the-official-mta-app.png
+NJ TRANSIT	nj-transit.png
+ParkNYC	parknyc.png
+PayByPhone	paybyphone.png
+Zipcar	zipcar.png
+Avis	avis.png
+AAA	aaa.png
+Rav-Kav	rav-kav.png
+Priority Pass	priority-pass.png
+HP Print	hp-print.png
+Epson iPrint	epson-iprint.png
+Canon Print	canon-print.png
+Brother Print	brother-print.png
+Con Edison	con-edison.png
+GEICO	geico.png
+Allstate	allstate.png
+Doximity	doximity.png
+OneKey MLS	onekey-mls.png
+Supra eKEY	supra-ekey.png
+Southwire calculators	southwire-calculators.png
+Yeled	yeled.png
+IamResponding	iamresponding.png

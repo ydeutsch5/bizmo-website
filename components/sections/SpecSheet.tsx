@@ -22,8 +22,8 @@ export default function SpecSheet() {
 
         <dl className="mt-16 grid grid-cols-2 border-y border-white/10 md:mt-24 lg:grid-cols-4">
           {specs.stats.map((s, i) => (
-            <div key={s.label} className={`px-1 py-10 md:px-8 md:py-14 ${i % 2 ? "border-s border-white/10" : ""} ${i > 0 ? "lg:border-s lg:border-white/10" : ""} ${i < 2 ? "max-lg:border-b max-lg:border-white/10" : ""}`} data-reveal style={{ ["--d" as string]: `${i * 0.1}s` }}>
-              <dd className="font-display text-[clamp(2rem,3.4vw,3.5rem)] leading-none font-semibold tracking-[-0.03em] text-white">{s.value}</dd>
+            <div key={s.label} className={`min-w-0 px-1 py-10 md:px-6 md:py-14 ${i % 2 ? "border-s border-white/10" : ""} ${i > 0 ? "lg:border-s lg:border-white/10" : ""} ${i < 2 ? "max-lg:border-b max-lg:border-white/10" : ""}`} data-reveal style={{ ["--d" as string]: `${i * 0.1}s` }}>
+              <dd className="font-display text-[clamp(1.6rem,2.3vw,2.6rem)] leading-none font-semibold tracking-[-0.03em] break-words text-white">{s.value}</dd>
               <dt className="mt-4 text-[0.95rem] text-mist">{s.label}</dt>
             </div>
           ))}

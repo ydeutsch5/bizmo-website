@@ -146,6 +146,14 @@ export const apps = {
   ],
 };
 
+/** File name for an app's icon: "Chase Mobile" -> chase-mobile (public/apps/chase-mobile.png) */
+export const appSlug = (name: string) =>
+  name
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
 /* ------------------------------------------------------------------ daily work (home screen illustration) */
 
 /*
