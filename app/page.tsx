@@ -13,6 +13,7 @@ import Compare from "@/components/sections/Compare";
 import Audience from "@/components/sections/Audience";
 import Notify from "@/components/sections/Notify";
 import Footer from "@/components/Footer";
+import BackToTop from "@/components/BackToTop";
 
 export default function Home() {
   return (
@@ -37,6 +38,7 @@ export default function Home() {
         <Notify />
       </main>
       <Footer />
+      <BackToTop />
     </>
   );
 }
