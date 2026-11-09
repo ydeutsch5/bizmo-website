@@ -14,13 +14,9 @@ export default function Cursor() {
     if (!window.matchMedia("(pointer: fine)").matches) return;
     const root = document.documentElement;
     root.classList.add("has-cursor");
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let x = innerWidth / 2,
       y = innerHeight / 2,
-      rx = x,
-      ry = y,
       shown = false,
-      raf = 0,
       big = false;
 
     const update = (target: Element | null) => {
@@ -40,15 +36,18 @@ export default function Cursor() {
         update(document.elementFromPoint(x, y));
       });
     };
+    const place = () => {
+      ring.current!.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    };
     const move = (e: PointerEvent) => {
       x = e.clientX;
       y = e.clientY;
       if (!shown) {
         shown = true;
-        rx = x;
-        ry = y;
         ring.current!.style.opacity = "1";
       }
+      // positioned straight from the event, not on the next animation frame: no lag behind the pointer
+      place();
       update(e.target as Element | null);
     };
     const leave = () => {
@@ -58,22 +57,12 @@ export default function Cursor() {
     const down = () => ring.current!.style.setProperty("--press", "0.86");
     const up = () => ring.current!.style.setProperty("--press", "1");
 
-    const loop = () => {
-      // a light ease so the ring feels weighted, but never far from the pointer
-      const k = reduced ? 1 : 0.42;
-      rx += (x - rx) * k;
-      ry += (y - ry) * k;
-      ring.current!.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
     window.addEventListener("pointermove", move, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
     document.addEventListener("pointerleave", leave);
     window.addEventListener("pointerdown", down);
     window.addEventListener("pointerup", up);
     return () => {
-      cancelAnimationFrame(raf);
       root.classList.remove("has-cursor");
       window.removeEventListener("pointermove", move);
       window.removeEventListener("scroll", onScroll);
