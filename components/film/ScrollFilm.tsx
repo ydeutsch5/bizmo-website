@@ -134,6 +134,19 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       kick();
     };
 
+    // posters: the first frame of each clip as a single still, so the stage is never empty while
+    // frames are still arriving (slow or flaky connections, phones on cellular)
+    const posters = new Map<ClipId, HTMLImageElement>();
+    for (const c of clips) {
+      const im = new Image();
+      im.decoding = "async";
+      im.onload = () => {
+        posters.set(c, im);
+        kick();
+      };
+      im.src = `/film/stills/${c}-first.webp`;
+    }
+
     const ensureStore = () => {
       if (started || !m) return;
       started = true;
@@ -170,6 +183,14 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       ctx.fillRect(0, 0, W, H);
 
       let place: ReturnType<typeof placement> | null = null;
+      if (!(store && m)) {
+        const poster = posters.get(beat.layers[0]?.clip);
+        if (poster) {
+          place = placement(view, 1600, 900, cam);
+          drawFrame(ctx, poster, place, 1);
+          feather(ctx, place, W, H);
+        }
+      }
       if (store && m) {
         const fw = m.sets[setName];
         const fh = Math.round((fw * 9) / 16);
@@ -184,7 +205,7 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
           else t = lerp(L.t0, L.t1 ?? L.t0, k);
           const i = Math.round(clamp01(t) * (n - 1));
           store.want(L.clip, i);
-          const img = store.get(L.clip, i);
+          const img = store.get(L.clip, i) ?? posters.get(L.clip) ?? null;
           const a = lerp(L.a0 ?? 1, L.a1 ?? L.a0 ?? 1, k);
           if (img) drawFrame(ctx, img, place, a);
         }
