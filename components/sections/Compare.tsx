@@ -2,9 +2,9 @@ import { compare } from "@/lib/content";
 import { Icon, type IconName } from "@/components/Icons";
 
 /*
-  Two columns, one verdict per row. The filter column is muted with a cross; the Bizmo column is a lit
-  card with a cobalt check. Each row carries a monoline icon for its topic. On phones the two columns
-  sit side by side inside each row, so the comparison is still read left to right.
+  One row per topic. The topic is a real heading with its icon; beside it, a muted card for the
+  ordinary device with a filter (cross) and a lit card for Bizmo (check). On phones the topic sits
+  on its own line and the two cards stack under it, filter first.
 */
 export default function Compare() {
   return (
@@ -29,66 +29,63 @@ export default function Compare() {
           </p>
         </div>
 
-        <div className="relative mt-16 md:mt-20" data-reveal>
-          {/* the Bizmo column is lit from within */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 end-0 hidden w-[calc((100%-14rem)/2)] rounded-[1.5rem] bg-[linear-gradient(180deg,rgb(4_99_239/0.16),rgb(45_218_255/0.04))] ring-1 ring-cyan/20 shadow-[0_40px_120px_-40px_rgb(4_99_239/0.55)] md:block"
-          />
+        <div className="mt-16 md:mt-20" role="table" aria-label="An ordinary device with a filter compared with Bizmo">
+          {/* column heads */}
+          <div role="row" className="mb-4 hidden grid-cols-[16.5rem_1fr_1fr] gap-4 md:grid">
+            <span role="columnheader">
+              <span className="sr-only">Topic</span>
+            </span>
+            <span role="columnheader" className="px-1 font-display text-[0.95rem] font-semibold tracking-[-0.01em] text-mist">
+              {compare.head[1]}
+            </span>
+            <span role="columnheader" className="px-1">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/bizmo-wordmark-white.svg" alt="Bizmo" width={82} height={24} className="h-[22px] w-auto" />
+            </span>
+          </div>
 
-          <table className="relative w-full table-fixed border-collapse max-md:table-auto">
-            <caption className="sr-only">An ordinary device with a filter compared with Bizmo</caption>
-            <thead>
-              <tr className="max-md:hidden">
-                <th scope="col" className="w-[14rem] py-7 text-start max-md:w-auto">
-                  <span className="sr-only">Topic</span>
-                </th>
-                <th scope="col" className="py-7 pe-8 text-start align-middle font-normal">
-                  <p className="font-display text-[1.15rem] font-semibold tracking-[-0.02em] text-aluminium/80">{compare.head[1]}</p>
-                  <p className="mt-1 text-[0.85rem] text-mist">{compare.headSub[1]}</p>
-                </th>
-                <th scope="col" className="px-8 py-7 text-start align-middle font-normal">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/brand/bizmo-wordmark-white.svg" alt="Bizmo" width={82} height={24} className="h-6 w-auto" />
-                  <p className="mt-2 text-[0.85rem] text-cyan/80">{compare.headSub[2]}</p>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="max-md:block">
-              {compare.rows.map(([k, a, b, icon], i) => {
-                const I = Icon[icon as IconName];
-                return (
-                  <tr key={k} className="border-t border-white/[0.08] align-top max-md:grid max-md:grid-cols-[2.25rem_1fr] max-md:gap-x-4 max-md:py-5" style={{ ["--d" as string]: `${i * 0.05}s` }}>
-                    <th scope="row" className="py-6 pe-6 text-start font-normal max-md:row-span-2 max-md:p-0">
-                      <span className="flex items-center gap-3">
-                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-aluminium">
-                          <I className="h-[18px] w-[18px]" />
-                        </span>
-                        <span className="act max-md:hidden">{k}</span>
-                      </span>
-                    </th>
-                    <td className="py-6 pe-8 max-md:p-0">
-                      <span className="act md:hidden">{k}</span>
-                      <span className="flex items-start gap-3 max-md:mt-2">
-                        <span className="mt-[3px] grid h-5 w-5 shrink-0 place-items-center rounded-full bg-white/[0.08] text-aluminium/60">
-                          <Icon.cross className="h-3 w-3" />
-                        </span>
-                        <span className="text-[1.02rem] leading-snug text-mist">{a}</span>
-                      </span>
-                    </td>
-                    <td className="px-8 py-6 max-md:px-0 max-md:pt-3 max-md:pb-0">
-                      <span className="flex items-start gap-3">
-                        <span className="mt-[3px] grid h-5 w-5 shrink-0 place-items-center rounded-full bg-gradient-to-tr from-cobalt to-cyan text-white shadow-[0_0_14px_rgb(45_218_255/0.6)]">
-                          <Icon.check className="h-3 w-3" strokeWidth={2.6} />
-                        </span>
-                        <span className="font-display text-[1.15rem] leading-snug font-semibold tracking-[-0.02em] text-white">{b}</span>
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className="grid gap-3">
+            {compare.rows.map(([k, a, b, icon], i) => {
+              const I = Icon[icon as IconName];
+              return (
+                <div
+                  key={k}
+                  role="row"
+                  className="grid gap-3 md:grid-cols-[16.5rem_1fr_1fr] md:gap-4"
+                  data-reveal
+                  style={{ ["--d" as string]: `${i * 0.05}s` }}
+                >
+                  <div role="rowheader" className="flex items-center gap-4 px-1 max-md:mt-5 max-md:first:mt-0">
+                    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-[14px] border border-white/10 bg-white/[0.04] text-cyan">
+                      <I className="h-5 w-5" />
+                    </span>
+                    <span className="font-display text-[1.4rem] font-semibold tracking-[-0.02em] text-white">{k}</span>
+                  </div>
+
+                  <div role="cell" className="flex items-start gap-3.5 rounded-[18px] border border-white/[0.06] bg-white/[0.025] px-6 py-5">
+                    <span className="mt-[2px] grid h-[22px] w-[22px] shrink-0 place-items-center rounded-full bg-white/[0.08] text-aluminium/55">
+                      <Icon.cross className="h-3 w-3" />
+                    </span>
+                    <span className="text-[1.05rem] leading-snug text-mist">
+                      <span className="sr-only md:hidden">{compare.head[1]}: </span>
+                      <span className="me-1.5 text-[0.75rem] font-medium tracking-[0.14em] text-aluminium/40 uppercase md:hidden">Filter</span>
+                      {a}
+                    </span>
+                  </div>
+
+                  <div role="cell" className="flex items-start gap-3.5 rounded-[18px] border border-cyan/20 bg-[linear-gradient(135deg,rgb(4_99_239/0.2),rgb(45_218_255/0.04))] px-6 py-5 shadow-[0_24px_70px_-40px_rgb(4_99_239/0.7)]">
+                    <span className="mt-[2px] grid h-[22px] w-[22px] shrink-0 place-items-center rounded-full bg-gradient-to-tr from-cobalt to-cyan text-white shadow-[0_0_14px_rgb(45_218_255/0.6)]">
+                      <Icon.check className="h-3 w-3" strokeWidth={2.6} />
+                    </span>
+                    <span className="font-display text-[1.12rem] leading-snug font-semibold tracking-[-0.015em] text-white">
+                      <span className="sr-only">Bizmo: </span>
+                      {b}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
