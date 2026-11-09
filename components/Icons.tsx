@@ -177,6 +177,18 @@ export const Icon = {
       <path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5 10.5 19" />
     </svg>
   ),
+  battery: (p: P) => (
+    <svg {...base(p)}>
+      <rect x="3" y="7.5" width="16" height="9" rx="2.5" />
+      <path d="M21 10.5v3M6.5 10.5v3M10 10.5v3M13.5 10.5v3" />
+    </svg>
+  ),
+  sensor: (p: P) => (
+    <svg {...base(p)}>
+      <circle cx="12" cy="12" r="2.2" />
+      <path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14" />
+    </svg>
+  ),
   // marks
   check: (p: P) => (
     <svg {...base(p)}>

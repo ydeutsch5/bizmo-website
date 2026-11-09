@@ -6,8 +6,9 @@
  * - Tech specs (Joel, 9 Nov 2026: the site must show the actual specs). Publish only the confirmed
  *   figures: Helio G99, 6 GB / 128 GB UFS + microSD, FHD 1920x1200 IPS, 13 MP rear, 4G LTE, Wi-Fi ac,
  *   BT 5.0, GPS, USB-C, the security stack, eSIM, international, Android Auto.
- *   Still held until a corrected sample confirms them: battery / battery life, screen inch figure,
- *   dual SIM, front camera, flash, sensors, talk time or calls, Android version, Google Play.
+ *   Joel confirmed on 9 Nov 2026: 10.95" display, 7000 mAh battery, dual SIM (physical or eSIM),
+ *   5 MP front camera, LED flash, sensors (accelerometer, light, e-compass, gyroscope).
+ *   Still out: talk time or calls (VoIP positioning), Android version, Google Play (approval pending).
  * - Do not mention price, "one price", "no monthly fees" or anything about billing.
  * - Do not say "no browser". Say "pre-approved app list, more apps added on request".
  * - Do not use the number 190, or any app count. Say "hundreds of work apps".
@@ -63,7 +64,7 @@ export const explode = {
   callouts: {
     processor: { label: "Helio G99 processor", sub: "6 GB memory, 128 GB UFS storage" },
     camera: { label: "13 MP camera", sub: "Autofocus, for scanning and signing documents" },
-    display: { label: "FHD 1920 × 1200 display", sub: "" },
+    display: { label: "10.95″ FHD display", sub: "1920 × 1200 IPS" },
   },
 };
 
@@ -203,7 +204,7 @@ export const camera = {
 };
 
 export const display = {
-  title: "FHD display.",
+  title: "10.95-inch FHD display.",
   titleSecond: "1920 × 1200 IPS.",
 };
 
@@ -215,14 +216,14 @@ export const specs = {
   stats: [
     { value: "Helio G99", label: "MediaTek octa-core processor, 6 nm", icon: "chip" },
     { value: "6 GB", label: "memory, with 128 GB UFS storage", icon: "memory" },
-    { value: "FHD", label: "1920 × 1200 IPS display", icon: "display" },
-    { value: "13 MP", label: "autofocus rear camera", icon: "camera" },
+    { value: "10.95″", label: "FHD 1920 × 1200 IPS display", icon: "display" },
+    { value: "7000 mAh", label: "battery, for a full day of work", icon: "battery" },
   ],
   extras: {
     title: "Wherever work takes you.",
     items: [
       { k: "Works internationally", v: "Take Bizmo on the road. It works abroad, with local carriers.", icon: "globe" },
-      { k: "eSIM", v: "Add a plan without a physical SIM card, at home or when travelling.", icon: "sim" },
+      { k: "Dual SIM with eSIM", v: "Two lines, dual standby. Add a plan without a physical SIM card, at home or when travelling.", icon: "sim" },
       { k: "Android Auto", v: "Navigation and phone-over-internet on your car's screen.", icon: "car" },
     ],
   },
@@ -231,10 +232,13 @@ export const specs = {
     { k: "Processor", v: "MediaTek Helio G99, octa-core, 6 nm", icon: "chip" },
     { k: "Memory", v: "6 GB RAM", icon: "memory" },
     { k: "Storage", v: "128 GB UFS, expandable with microSD", icon: "storage" },
-    { k: "Display", v: "FHD 1920 × 1200 IPS, responsive multi-touch", icon: "display" },
-    { k: "Rear camera", v: "13 MP with autofocus, for scanning and signing documents", icon: "camera" },
-    { k: "Cellular", v: "4G LTE. eSIM ready. Works internationally.", icon: "signal" },
+    { k: "Display", v: "10.95-inch FHD 1920 × 1200 IPS, responsive multi-touch", icon: "display" },
+    { k: "Battery", v: "7000 mAh", icon: "battery" },
+    { k: "Cameras", v: "13 MP rear with autofocus and LED flash, for scanning and signing documents. 5 MP front.", icon: "camera" },
+    { k: "SIM", v: "Dual SIM, dual standby: physical SIM or eSIM", icon: "sim" },
+    { k: "Cellular", v: "4G LTE. Works internationally.", icon: "signal" },
     { k: "Wireless", v: "Wi-Fi 802.11ac, Bluetooth 5.0, GPS", icon: "wifi" },
+    { k: "Sensors", v: "Accelerometer, ambient light, e-compass, gyroscope", icon: "sensor" },
     { k: "Port", v: "USB-C", icon: "usb" },
     { k: "In the car", v: "Android Auto", icon: "car" },
     { k: "Security", v: "Secure boot, locked bootloader, verified boot, full encryption", icon: "shield" },
