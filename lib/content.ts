@@ -210,7 +210,7 @@ export const display = {
 
 /* Tech specs. Figures here are the confirmed, publishable ones (see the facts rule at the top). */
 export const specs = {
-  title: "Tech specs.",
+  title: "Everything inside.",
   lead: "Built for a full day of real work, and locked at the firmware.",
   // the headline figures
   stats: [
@@ -227,23 +227,49 @@ export const specs = {
       { k: "Android Auto", v: "Navigation and phone-over-internet on your car's screen.", icon: "car" },
     ],
   },
-  // the full sheet
-  rows: [
-    { k: "Processor", v: "MediaTek Helio G99, octa-core, 6 nm", icon: "chip" },
-    { k: "Memory", v: "6 GB RAM", icon: "memory" },
-    { k: "Storage", v: "128 GB UFS, expandable with microSD", icon: "storage" },
-    { k: "Display", v: "10.95-inch FHD 1920 × 1200 IPS, responsive multi-touch", icon: "display" },
-    { k: "Battery", v: "7000 mAh", icon: "battery" },
-    { k: "Cameras", v: "13 MP rear with autofocus and LED flash, for scanning and signing documents. 5 MP front.", icon: "camera" },
-    { k: "SIM", v: "Dual SIM, dual standby: physical SIM or eSIM", icon: "sim" },
-    { k: "Cellular", v: "4G LTE. Works internationally.", icon: "signal" },
-    { k: "Wireless", v: "Wi-Fi 802.11ac, Bluetooth 5.0, GPS", icon: "wifi" },
-    { k: "Sensors", v: "Accelerometer, ambient light, e-compass, gyroscope", icon: "sensor" },
-    { k: "Port", v: "USB-C", icon: "usb" },
-    { k: "In the car", v: "Android Auto", icon: "car" },
-    { k: "Security", v: "Secure boot, locked bootloader, verified boot, full encryption", icon: "shield" },
-    { k: "Software", v: "Bizmo's own operating system, from its own source code. Filtering built into the apps. Only pre-approved business apps run. Native speed, no proxy.", icon: "code" },
-  ],
+  // the full sheet, in four groups
+  groups: [
+    {
+      title: "Performance",
+      icon: "chip",
+      rows: [
+        ["Processor", "MediaTek Helio G99, octa-core, 6 nm"],
+        ["Memory", "6 GB RAM"],
+        ["Storage", "128 GB UFS + microSD"],
+        ["Battery", "7000 mAh"],
+      ],
+    },
+    {
+      title: "Display & cameras",
+      icon: "display",
+      rows: [
+        ["Display", "10.95″ FHD 1920 × 1200 IPS"],
+        ["Rear camera", "13 MP autofocus, LED flash"],
+        ["Front camera", "5 MP"],
+        ["Sensors", "Accelerometer, light, e-compass, gyroscope"],
+      ],
+    },
+    {
+      title: "Connectivity",
+      icon: "signal",
+      rows: [
+        ["Cellular", "4G LTE, works internationally"],
+        ["SIM", "Dual SIM: physical or eSIM"],
+        ["Wireless", "Wi-Fi ac, Bluetooth 5.0, GPS"],
+        ["Port & car", "USB-C · Android Auto"],
+      ],
+    },
+    {
+      title: "Security & software",
+      icon: "shield",
+      rows: [
+        ["Boot", "Secure boot, locked bootloader, verified boot"],
+        ["Data", "Full encryption"],
+        ["System", "Bizmo's own OS, own source code"],
+        ["Apps", "Only pre-approved business apps"],
+      ],
+    },
+  ] as { title: string; icon: string; rows: [string, string][] }[],
   note: "Specifications describe the production model and may be refined before launch.",
 };
 
