@@ -72,15 +72,16 @@ const FADE = 0.32;
 const opacityAt = (pos: number, a: number, b: number) =>
   Math.min(a < 0 ? 1 : smooth((pos - a) / FADE), b === Infinity ? 1 : smooth((b - pos) / FADE));
 
+/**
+ * The film is scrubbed by the reader's own scrolling, so it stays on when the system asks for
+ * reduced motion; what goes away then is everything that moves by itself (the idle sway, the
+ * pointer parallax, the inertial scroll, the intro). ?motion=off forces the static layout.
+ */
 export default function ScrollFilm(props: FilmProps) {
   const [mode, setMode] = useState<"film" | "static">("film");
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const q = new URLSearchParams(location.search).get("motion");
-    const set = () => setMode(mq.matches || q === "off" ? "static" : "film");
-    set();
-    mq.addEventListener("change", set);
-    return () => mq.removeEventListener("change", set);
+    setMode(q === "off" ? "static" : "film");
   }, []);
   return mode === "static" ? <StaticFilm {...props} /> : <PinnedFilm {...props} />;
 }
@@ -116,6 +117,10 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
     let started = false;
     let setName: "lg" | "sm" = "lg";
     let steer = 0.05; // smoothed pointer-driven position for "mouse" layers
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches; // nothing moves on its own
+    const debug = new URLSearchParams(location.search).get("debug") === "1";
+    const dbg = debug ? Object.assign(document.createElement("pre"), { className: "film-debug" }) : null;
+    if (dbg) stage.appendChild(dbg);
     trackPointer();
 
     const resize = () => {
@@ -154,10 +159,10 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       const at = tl.at(p);
       const { beat, k } = at;
       let cam = at.cam;
-      if (beat.parallax && !view.mobile) cam = { x: cam.x + (pointer.x - 0.5) * 0.018, y: cam.y + (pointer.y - 0.5) * 0.026, s: cam.s };
+      if (beat.parallax && !view.mobile && !calm) cam = { x: cam.x + (pointer.x - 0.5) * 0.018, y: cam.y + (pointer.y - 0.5) * 0.026, s: cam.s };
       // the pointer turns the device: left of the screen faces you, moving right turns it towards its edge
       const idle = now - pointer.moved > 2200;
-      const steerTarget = idle ? 0.05 + 0.05 * Math.sin(now / 1700) : 0.34 * smooth((pointer.x - 0.22) / 0.72);
+      const steerTarget = calm ? 0.05 : idle ? 0.05 + 0.05 * Math.sin(now / 1700) : 0.34 * smooth((pointer.x - 0.22) / 0.72);
       steer += (steerTarget - steer) * (idle ? 0.03 : 0.085);
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -255,6 +260,8 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       }
 
       if (progressRef.current) progressRef.current.style.transform = `scaleX(${clamp01(p / tl.total).toFixed(4)})`;
+
+      if (dbg) dbg.textContent = `${id} pos ${p.toFixed(2)} beat ${beat.id} ${view.W}x${view.H} ${view.mobile ? "stacked" : "wide"} dpr ${dpr}\nset ${setName} frames ${store?.loaded ?? 0}/${store?.total ?? 0} ${m ? "" : "manifest missing"} ${calm ? "reduced-motion" : ""}\nua ${navigator.userAgent.slice(0, 90)}`;
 
       if (inView) raf = requestAnimationFrame(render);
     }

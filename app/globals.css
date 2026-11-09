@@ -460,3 +460,18 @@ html.menu-open,
 html.menu-open body {
   overflow: hidden;
 }
+
+/* ?debug=1 readout for the scroll films */
+.film-debug {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  z-index: 40;
+  margin: 0;
+  padding: 6px 8px;
+  font: 11px/1.4 ui-monospace, monospace;
+  color: #2ddaff;
+  background: rgb(0 0 0 / 0.6);
+  white-space: pre-wrap;
+  pointer-events: none;
+}
