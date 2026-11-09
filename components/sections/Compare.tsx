@@ -40,14 +40,14 @@ export default function Compare() {
             <caption className="sr-only">An ordinary device with a filter compared with Bizmo</caption>
             <thead>
               <tr className="max-md:hidden">
-                <th scope="col" className="w-[14rem] pb-6 text-start max-md:w-auto">
+                <th scope="col" className="w-[14rem] py-7 text-start max-md:w-auto">
                   <span className="sr-only">Topic</span>
                 </th>
-                <th scope="col" className="pb-6 pe-8 text-start font-normal">
+                <th scope="col" className="py-7 pe-8 text-start align-middle font-normal">
                   <p className="font-display text-[1.15rem] font-semibold tracking-[-0.02em] text-aluminium/80">{compare.head[1]}</p>
                   <p className="mt-1 text-[0.85rem] text-mist">{compare.headSub[1]}</p>
                 </th>
-                <th scope="col" className="px-8 pb-6 text-start font-normal">
+                <th scope="col" className="px-8 py-7 text-start align-middle font-normal">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/brand/bizmo-wordmark-white.svg" alt="Bizmo" width={82} height={24} className="h-6 w-auto" />
                   <p className="mt-2 text-[0.85rem] text-cyan/80">{compare.headSub[2]}</p>
