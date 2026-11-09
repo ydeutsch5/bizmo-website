@@ -7,7 +7,7 @@ export const ACTS = [
   { id: "apps", n: "II", label: "Apps" },
   { id: "speed", n: "III", label: "Speed" },
   { id: "daily", n: "IV", label: "Daily work" },
-  { id: "specs", n: "V", label: "The device" },
+  { id: "specs", n: "V", label: "Tech specs" },
   { id: "trust", n: "VI", label: "Certification" },
   { id: "compare", n: "VII", label: "Compare" },
   { id: "notify", n: "VIII", label: "Launch" },

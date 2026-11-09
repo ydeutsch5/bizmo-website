@@ -3,8 +3,11 @@
  *
  * FACTS RULE (from Joel's handover, updated with his website comments of 21 Oct 2026):
  * - Never call Bizmo a "tablet". It is a work device / business device.
- * - No hardware numbers anywhere (processor model, RAM, storage, megapixels, resolution,
- *   battery, screen size). Use general terms: fast processor, responsive touch, sharp camera.
+ * - Tech specs (Joel, 9 Nov 2026: the site must show the actual specs). Publish only the confirmed
+ *   figures: Helio G99, 6 GB / 128 GB UFS + microSD, FHD 1920x1200 IPS, 13 MP rear, 4G LTE, Wi-Fi ac,
+ *   BT 5.0, GPS, USB-C, the security stack, eSIM, international, Android Auto.
+ *   Still held until a corrected sample confirms them: battery / battery life, screen inch figure,
+ *   dual SIM, front camera, flash, sensors, talk time or calls, Android version, Google Play.
  * - Do not mention price, "one price", "no monthly fees" or anything about billing.
  * - Do not say "no browser". Say "pre-approved app list, more apps added on request".
  * - Do not use the number 190, or any app count. Say "hundreds of work apps".
@@ -25,7 +28,7 @@ export const site = {
 export const nav = [
   { href: "#system", label: "How it works" },
   { href: "#apps", label: "Apps" },
-  { href: "#specs", label: "The device" },
+  { href: "#specs", label: "Tech specs" },
   { href: "#compare", label: "Compare" },
 ];
 
@@ -58,9 +61,9 @@ export const explode = {
   title: "Built from the ground up.",
   body: "Bizmo is not an ordinary device with a filter on top. It runs its own operating system, built from its own source code, with the filtering built into the apps themselves.",
   callouts: {
-    processor: { label: "Fast processor", sub: "Plenty of memory and storage for a full day of work" },
-    camera: { label: "Sharp camera", sub: "Scan and sign documents" },
-    display: { label: "Bright, responsive display", sub: "" },
+    processor: { label: "Helio G99 processor", sub: "6 GB memory, 128 GB UFS storage" },
+    camera: { label: "13 MP camera", sub: "Autofocus, for scanning and signing documents" },
+    display: { label: "FHD 1920 × 1200 display", sub: "" },
   },
 };
 
@@ -195,42 +198,49 @@ export const speed = {
 /* ------------------------------------------------------------------ film B: close-ups + the device */
 
 export const camera = {
-  title: "A sharp camera.",
+  title: "A 13 MP camera.",
   body: "Scan and sign documents with approved apps such as Genius Scan and Adobe Fill & Sign.",
 };
 
 export const display = {
-  title: "Bright display.",
-  titleSecond: "Responsive touch.",
+  title: "FHD display.",
+  titleSecond: "1920 × 1200 IPS.",
 };
 
-/* General terms only: Bizmo is not sold on a spec sheet. */
+/* Tech specs. Figures here are the confirmed, publishable ones (see the facts rule at the top). */
 export const specs = {
-  title: "Built to work.",
-  lead: "Everything you need to get the job done, and nothing you never asked for.",
+  title: "Tech specs.",
+  lead: "Built for a full day of real work, and locked at the firmware.",
+  // the headline figures
   stats: [
-    { value: "Fast", label: "processor, with plenty of memory and storage" },
-    { value: "Responsive", label: "touch on a bright, sharp display" },
-    { value: "Sharp", label: "camera for scanning and signing documents" },
-    { value: "Locked", label: "at the firmware, so it cannot be bypassed" },
+    { value: "Helio G99", label: "MediaTek octa-core processor, 6 nm", icon: "chip" },
+    { value: "6 GB", label: "memory, with 128 GB UFS storage", icon: "memory" },
+    { value: "FHD", label: "1920 × 1200 IPS display", icon: "display" },
+    { value: "13 MP", label: "autofocus rear camera", icon: "camera" },
   ],
   extras: {
     title: "Wherever work takes you.",
     items: [
-      { k: "Works internationally", v: "Take Bizmo on the road. It works abroad, with local carriers." },
-      { k: "eSIM", v: "Add a plan without a physical SIM card, at home or when travelling." },
-      { k: "Android Auto", v: "Navigation and phone-over-internet on your car's screen." },
+      { k: "Works internationally", v: "Take Bizmo on the road. It works abroad, with local carriers.", icon: "globe" },
+      { k: "eSIM", v: "Add a plan without a physical SIM card, at home or when travelling.", icon: "sim" },
+      { k: "Android Auto", v: "Navigation and phone-over-internet on your car's screen.", icon: "car" },
     ],
   },
+  // the full sheet
   rows: [
-    { k: "Performance", v: "A fast processor with plenty of memory and storage for a full day of work." },
-    { k: "Display", v: "Bright and sharp, with responsive touch." },
-    { k: "Camera", v: "A sharp rear camera for scanning and signing documents." },
-    { k: "Connectivity", v: "Cellular, Wi-Fi, Bluetooth and GPS. Works internationally. eSIM ready." },
-    { k: "In the car", v: "Android Auto." },
-    { k: "Security", v: "Secure boot, locked bootloader, verified boot, full encryption." },
-    { k: "Platform", v: "Its own operating system and source code. Filtering built into the apps. Only pre-approved business apps run. Native speed, no proxy." },
+    { k: "Processor", v: "MediaTek Helio G99, octa-core, 6 nm", icon: "chip" },
+    { k: "Memory", v: "6 GB RAM", icon: "memory" },
+    { k: "Storage", v: "128 GB UFS, expandable with microSD", icon: "storage" },
+    { k: "Display", v: "FHD 1920 × 1200 IPS, responsive multi-touch", icon: "display" },
+    { k: "Rear camera", v: "13 MP with autofocus, for scanning and signing documents", icon: "camera" },
+    { k: "Cellular", v: "4G LTE. eSIM ready. Works internationally.", icon: "signal" },
+    { k: "Wireless", v: "Wi-Fi 802.11ac, Bluetooth 5.0, GPS", icon: "wifi" },
+    { k: "Port", v: "USB-C", icon: "usb" },
+    { k: "In the car", v: "Android Auto", icon: "car" },
+    { k: "Security", v: "Secure boot, locked bootloader, verified boot, full encryption", icon: "shield" },
+    { k: "Software", v: "Bizmo's own operating system, from its own source code. Filtering built into the apps. Only pre-approved business apps run. Native speed, no proxy.", icon: "code" },
   ],
+  note: "Specifications describe the production model and may be refined before launch.",
 };
 
 /* ------------------------------------------------------------------ film C: trust */
@@ -247,15 +257,17 @@ export const compare = {
   title: ["Built kosher,", "not filtered after the fact."],
   body: "The real alternative to Bizmo is an ordinary device with a filter subscription. Here is how they differ.",
   head: ["", "Ordinary device with a filter", "Bizmo"],
+  headSub: ["", "A filter added on top", "The kosher business device"],
+  // [topic, with a filter, Bizmo, icon]
   rows: [
-    ["Filtering", "Covers mostly the web browser", "Built into every app, inside the device"],
-    ["Apps", "Everything stays open to distraction", "Pre-approved business apps, more on request"],
-    ["Control", "The filter company decides what is blocked", "Full control over every app, set to your standard"],
-    ["Speed", "Slowed by a proxy server", "Native speed, no proxy"],
-    ["Appearance", "Looks like any device", "Visually distinct, recognisable as kosher"],
-    ["Protection", "Can be bypassed", "Locked bootloader, verified boot, full encryption"],
-    ["Certification", "None", "Certified by Vaad HaKehilos"],
-  ],
+    ["Filtering", "Covers mostly the web browser", "Built into every app, inside the device", "filter"],
+    ["Apps", "Everything stays open to distraction", "Pre-approved business apps, more on request", "apps"],
+    ["Control", "The filter company decides what is blocked", "Full control over every app, set to your standard", "control"],
+    ["Speed", "Slowed by a proxy server", "Native speed, no proxy", "speed"],
+    ["Appearance", "Looks like any device", "Visually distinct, recognisable as kosher", "eye"],
+    ["Protection", "Can be bypassed", "Locked bootloader, verified boot, full encryption", "lock"],
+    ["Certification", "None", "Certified by Vaad HaKehilos", "certified"],
+  ] as [string, string, string, string][],
 };
 
 /* ------------------------------------------------------------------ audience */
@@ -263,7 +275,14 @@ export const compare = {
 export const audience = {
   title: ["For people who already", "carry a device for work."],
   body: "Bizmo is a cleaner, certified replacement for the work device you carry today: built for productivity, with zero distractions. Sold through authorized dealers.",
-  roles: ["Business owners", "Salespeople", "Contractors", "Field workers", "Travelers", "Office professionals"],
+  roles: [
+    { name: "Business owners", sub: "Banking, payroll, the whole office in hand", icon: "owner" },
+    { name: "Salespeople", sub: "CRM, quotes and signatures on the road", icon: "sales" },
+    { name: "Contractors", sub: "Estimates, invoices, cameras and alarms", icon: "contractor" },
+    { name: "Field workers", sub: "Navigation, time sheets, photos of the job", icon: "field" },
+    { name: "Travelers", sub: "Works internationally, eSIM ready", icon: "traveler" },
+    { name: "Office professionals", sub: "Microsoft and Google work apps, sign-in and security", icon: "office" },
+  ],
 };
 
 /* ------------------------------------------------------------------ sign-up */

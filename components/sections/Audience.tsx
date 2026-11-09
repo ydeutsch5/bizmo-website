@@ -1,4 +1,5 @@
 import { audience } from "@/lib/content";
+import { Icon, type IconName } from "@/components/Icons";
 
 export default function Audience() {
   return (
@@ -22,12 +23,21 @@ export default function Audience() {
           <p className="lede mt-8 text-aluminium/70" data-reveal>
             {audience.body}
           </p>
-          <ul className="mt-12 grid grid-cols-2 border-t border-white/10">
-            {audience.roles.map((r, i) => (
-              <li key={r} className="border-b border-white/10 py-4 pe-4 font-display text-[1.1rem] font-semibold tracking-[-0.02em] text-aluminium" data-reveal style={{ ["--d" as string]: `${i * 0.06}s` }}>
-                {r}
-              </li>
-            ))}
+          <ul className="mt-12 grid gap-3 sm:grid-cols-2">
+            {audience.roles.map((r, i) => {
+              const I = Icon[r.icon as IconName];
+              return (
+                <li key={r.name} className="group flex items-start gap-4 rounded-[1.1rem] border border-white/10 bg-white/[0.03] p-4 transition-colors duration-500 hover:border-cyan/30 hover:bg-white/[0.05]" data-reveal style={{ ["--d" as string]: `${i * 0.06}s` }}>
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/10 bg-night text-aluminium transition-colors duration-500 group-hover:text-cyan">
+                    <I className="h-[22px] w-[22px]" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block font-display text-[1.05rem] font-semibold tracking-[-0.02em] text-white">{r.name}</span>
+                    <span className="mt-1 block text-[0.88rem] leading-snug text-mist">{r.sub}</span>
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div className="relative mx-auto w-full max-w-[36rem]" data-reveal style={{ ["--d" as string]: "0.2s" }}>
