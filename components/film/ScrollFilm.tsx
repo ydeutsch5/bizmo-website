@@ -131,6 +131,7 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(W * dpr);
       canvas.height = Math.round(H * dpr);
+      sizeSection();
       kick();
     };
 
@@ -162,7 +163,12 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       kick();
     });
 
-    const pos = () => -section.getBoundingClientRect().top / Math.max(stage.clientHeight, 1);
+    // phones: a swipe is about one screen, so the film runs at 0.6 of its desktop length to keep every swipe doing something
+    const speed = () => (view.mobile ? 0.6 : 1);
+    const pos = () => -section.getBoundingClientRect().top / Math.max(stage.clientHeight, 1) / speed();
+    const sizeSection = () => {
+      section.style.height = `${((tl.total + tail) * 100 * speed()).toFixed(1)}svh`;
+    };
 
     function render(now: number) {
       raf = 0;
@@ -201,7 +207,7 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
           if (L.t0 === "loop") {
             const dur = n / m.fps;
             t = ((now / 1000) % dur) / dur;
-          } else if (L.t0 === "mouse") t = lerp(steer, L.t1 ?? steer, k);
+          } else if (L.t0 === "mouse") t = view.mobile && L.m0 !== undefined ? lerp(L.m0, L.m1 ?? L.m0, k) : lerp(steer, L.t1 ?? steer, k);
           else t = lerp(L.t0, L.t1 ?? L.t0, k);
           const i = Math.round(clamp01(t) * (n - 1));
           store.want(L.clip, i);
@@ -320,7 +326,7 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       ro.disconnect();
       store?.destroy();
     };
-  }, [clips, tl, copy, callouts, screens]);
+  }, [clips, tl, copy, callouts, screens, tail]);
 
   return (
     <section ref={sectionRef} id={id} aria-label={label} className="relative bg-graphite" style={{ height: `${(tl.total + tail) * 100}svh` }}>

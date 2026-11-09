@@ -19,8 +19,8 @@ const R = { x: 0.2, y: 0.03, s: 0.8, ms: 1.0 }; // device framed to the right of
 
 const A = timeline([
   // the pointer turns the device (see "mouse" layers in ScrollFilm)
-  { id: "hero", len: 1.0, layers: [{ clip: "turn", t0: "mouse" }], cam0: R, parallax: true },
-  { id: "hero-out", len: 0.45, layers: [{ clip: "turn", t0: "mouse", t1: 0.36 }], cam0: R, cam1: { x: 0.2, y: 0.03, s: 0.85, ms: 1.0 } },
+  { id: "hero", len: 1.0, layers: [{ clip: "turn", t0: "mouse", m0: 0.04, m1: 0.2 }], cam0: R, parallax: true },
+  { id: "hero-out", len: 0.45, layers: [{ clip: "turn", t0: "mouse", t1: 0.36, m0: 0.2, m1: 0.36 }], cam0: R, cam1: { x: 0.2, y: 0.03, s: 0.85, ms: 1.0 } },
   { id: "turn", len: 1.8, layers: [{ clip: "turn", t0: 0.36, t1: 1 }], cam0: { x: 0.2, y: 0.03, s: 0.85, ms: 1.0 }, cam1: { x: 0.17, y: 0.02, s: 0.88, ms: 1.0 } },
   { id: "explode", len: 2.2, layers: [{ clip: "explode", t0: 0, t1: 1 }], cam0: { x: 0.17, y: 0.02, s: 0.88 }, cam1: { x: 0.03, y: 0.0, s: 0.94 } },
   { id: "explode-hold", len: 1.5, layers: [{ clip: "explode", t0: 1 }], cam0: { x: 0.03, y: 0.0, s: 0.94 }, cam1: { x: 0.02, y: 0.0, s: 0.99 }, ease: easeOut },

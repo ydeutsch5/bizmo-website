@@ -34,6 +34,9 @@ export type Layer = {
   clip: ClipId;
   t0: number | "loop" | "mouse";
   t1?: number;
+  /** phones (no pointer): a "mouse" layer scrubs from m0 to m1 across the beat instead, so the first swipe already moves the device */
+  m0?: number;
+  m1?: number;
   a0?: number; // opacity at beat start
   a1?: number; // opacity at beat end
 };
