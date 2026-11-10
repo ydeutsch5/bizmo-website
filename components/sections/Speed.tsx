@@ -21,6 +21,7 @@ export default function Speed() {
   const slowEnd = useRef<SVGCircleElement>(null);
   const fastEnd = useRef<SVGCircleElement>(null);
   const server = useRef<SVGGElement>(null);
+  const diagram = useRef<SVGSVGElement>(null);
   const [narrow, setNarrow] = useState(false);
 
   useEffect(() => {
@@ -44,12 +45,15 @@ export default function Speed() {
 
     const paint = () => {
       raf = 0;
-      const r = el.getBoundingClientRect();
+      // measured on the drawing itself, not the section: the race starts once the whole drawing is on
+      // screen (its bottom edge is 8% above the bottom of the viewport) and runs over at least half a screen
+      const r = diagram.current!.getBoundingClientRect();
       const vh = window.innerHeight;
-      // starts when the diagram is well into view (not as soon as it peeks in), and finishes before it leaves
-      const p = reduced ? 1 : clamp01((vh * 0.55 - r.top) / (r.height * 0.6));
-      const f = ease(p / 0.38); // Bizmo: straight there
-      const s = p < 0.42 ? ease(p / 0.42) * 0.5 : p < 0.62 ? 0.5 : 0.5 + ease((p - 0.62) / 0.38) * 0.5; // filter: to the server, a wait, then on
+      const startAt = vh * 0.92 - r.height;
+      const endAt = Math.min(vh * 0.12, startAt - vh * 0.55); // at least half a screen of scrolling for the whole race
+      const p = reduced ? 1 : clamp01((startAt - r.top) / Math.max(startAt - endAt, 1));
+      const f = ease(p / 0.55); // Bizmo: straight there, arriving while the filter route still waits at the server
+      const s = p < 0.4 ? ease(p / 0.4) * 0.5 : p < 0.66 ? 0.5 : 0.5 + ease((p - 0.66) / 0.34) * 0.5; // filter: to the server, a wait, then on
       const sPt = sp.getPointAtLength(s * sl);
       const fPt = fp.getPointAtLength(f * fl);
       slowDot.current!.setAttribute("transform", `translate(${sPt.x} ${sPt.y})`);
@@ -58,7 +62,7 @@ export default function Speed() {
       fastTrail.current!.style.strokeDashoffset = `${fl * (1 - f)}`;
       slowEnd.current!.style.opacity = s > 0.995 ? "1" : "0";
       fastEnd.current!.style.opacity = f > 0.995 ? "1" : "0";
-      server.current!.style.opacity = p >= 0.42 && p < 0.62 ? "1" : "0.55";
+      server.current!.style.opacity = p >= 0.4 && p < 0.66 ? "1" : "0.55";
     };
     const kick = () => {
       if (!raf) raf = requestAnimationFrame(paint);
@@ -109,7 +113,7 @@ export default function Speed() {
         </div>
 
         <figure className="relative" dir="ltr">
-          <svg viewBox={`0 0 ${VW} 420`} className="h-auto w-full overflow-visible" role="img" aria-labelledby="speed-diagram-title">
+          <svg ref={diagram} viewBox={`0 0 ${VW} 420`} className="h-auto w-full overflow-visible" role="img" aria-labelledby="speed-diagram-title">
             <title id="speed-diagram-title">An ordinary device with a filter routes traffic through a filter server before it reaches your apps. Bizmo connects directly.</title>
             <defs>
               <linearGradient id="spd-dot" gradientUnits="userSpaceOnUse" x1={a} y1="0" x2={b} y2="0">

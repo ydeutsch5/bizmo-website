@@ -4,8 +4,9 @@
  * FACTS RULE (from Joel's handover, updated with his website comments of 21 Oct 2026):
  * - Never call Bizmo a "tablet". It is a work device / business device.
  * - Tech specs (Joel, 9 Nov 2026: the site must show the actual specs). Publish only the confirmed
- *   figures: Helio G99, 6 GB / 128 GB UFS + microSD, FHD 1920x1200 IPS, 13 MP rear, 4G LTE, Wi-Fi ac,
+ *   figures: 6 GB / 128 GB UFS + microSD, FHD 1920x1200 IPS, autofocus rear camera, 4G LTE, Wi-Fi ac,
  *   BT 5.0, GPS, USB-C, the security stack, eSIM, international, Android Auto.
+ *   Partner feedback 10 Nov 2026: never name the processor (model, cores, nm) or camera megapixels.
  *   Joel confirmed on 9 Nov 2026: 10.95" display, 7000 mAh battery, dual SIM (physical or eSIM),
  *   5 MP front camera, LED flash, sensors (accelerometer, light, e-compass, gyroscope).
  *   Still out: talk time or calls (VoIP positioning), Android version, Google Play (approval pending).
@@ -62,8 +63,8 @@ export const explode = {
   title: "Built from the ground up.",
   body: "Bizmo is not an ordinary device with a filter on top. It runs its own operating system, built from its own source code, with the filtering built into the apps themselves.",
   callouts: {
-    processor: { label: "Helio G99 processor", sub: "6 GB memory, 128 GB UFS storage" },
-    camera: { label: "13 MP camera", sub: "Autofocus, for scanning and signing documents" },
+    processor: { label: "Fast processor", sub: "6 GB memory, 128 GB UFS storage" },
+    camera: { label: "Autofocus camera", sub: "For scanning and signing documents" },
     display: { label: "10.95″ FHD display", sub: "1920 × 1200 IPS" },
   },
 };
@@ -77,15 +78,7 @@ export const layers = {
     { id: "verified", label: "Verified boot", sub: "Full encryption" },
     { id: "boot", label: "Secure boot", sub: "Locked bootloader" },
   ],
-  // the in-device filtering diagram drawn on the screen during this beat
-  diagram: {
-    apps: ["Bank", "Invoices", "Email", "Calls"],
-    filter: "Filter",
-    filterSub: "Inside Bizmo",
-    out: "Internet",
-    note: "Nothing leaves the device unfiltered",
-    frame: "Locked at the firmware",
-  },
+
 };
 
 /* ------------------------------------------------------------------ apps */
@@ -199,7 +192,7 @@ export const speed = {
 /* ------------------------------------------------------------------ film B: close-ups + the device */
 
 export const camera = {
-  title: "A 13 MP camera.",
+  title: "A sharp camera.",
   body: "Scan and sign documents with approved apps such as Genius Scan and Adobe Fill & Sign.",
 };
 
@@ -212,13 +205,6 @@ export const display = {
 export const specs = {
   title: "Everything inside.",
   lead: "Built for a full day of real work, and locked at the firmware.",
-  // the headline figures
-  stats: [
-    { value: "Helio G99", label: "MediaTek octa-core processor, 6 nm", icon: "chip" },
-    { value: "6 GB", label: "memory, with 128 GB UFS storage", icon: "memory" },
-    { value: "10.95″", label: "FHD 1920 × 1200 IPS display", icon: "display" },
-    { value: "7000 mAh", label: "battery, for a full day of work", icon: "battery" },
-  ],
   extras: {
     title: "Wherever work takes you.",
     items: [
@@ -233,7 +219,7 @@ export const specs = {
       title: "Performance",
       icon: "chip",
       rows: [
-        ["Processor", "MediaTek Helio G99, octa-core, 6 nm"],
+        ["Processor", "Fast, efficient mobile processor"],
         ["Memory", "6 GB RAM"],
         ["Storage", "128 GB UFS + microSD"],
         ["Battery", "7000 mAh"],
@@ -244,8 +230,8 @@ export const specs = {
       icon: "display",
       rows: [
         ["Display", "10.95″ FHD 1920 × 1200 IPS"],
-        ["Rear camera", "13 MP autofocus, LED flash"],
-        ["Front camera", "5 MP"],
+        ["Rear camera", "Autofocus, LED flash"],
+        ["Front camera", "For video meetings"],
         ["Sensors", "Accelerometer, light, e-compass, gyroscope"],
       ],
     },

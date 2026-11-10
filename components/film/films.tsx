@@ -1,7 +1,6 @@
 "use client";
 
-import ScrollFilm, { type Callout, type Copy, type Screen } from "./ScrollFilm";
-import InsideDiagram from "./InsideDiagram";
+import ScrollFilm, { type Callout, type Copy } from "./ScrollFilm";
 import { easeOut, timeline, type Beat, type ClipId } from "@/lib/film/engine";
 import { camera, display, explode, hero, layers, trust, turn } from "@/lib/content";
 
@@ -21,13 +20,16 @@ const A = timeline([
   // the pointer turns the device (see "mouse" layers in ScrollFilm)
   { id: "hero", len: 1.0, layers: [{ clip: "turn", t0: "mouse", m0: 0.04, m1: 0.2 }], cam0: R, parallax: true },
   { id: "hero-out", len: 0.45, layers: [{ clip: "turn", t0: "mouse", t1: 0.36, m0: 0.2, m1: 0.36 }], cam0: R, cam1: { x: 0.2, y: 0.03, s: 0.85, ms: 1.0 } },
-  { id: "turn", len: 1.8, layers: [{ clip: "turn", t0: 0.36, t1: 1 }], cam0: { x: 0.2, y: 0.03, s: 0.85, ms: 1.0 }, cam1: { x: 0.17, y: 0.02, s: 0.88, ms: 1.0 } },
+  // The rendered turn shows a doubled body while the device is edge-on (frames 58-95 of the clip).
+  // Those frames are never shown: the turn plays up to 0.39, dissolves across to 0.66, then plays on.
+  { id: "turn", len: 0.35, layers: [{ clip: "turn", t0: 0.36, t1: 0.39 }], cam0: { x: 0.2, y: 0.03, s: 0.85, ms: 1.0 }, cam1: { x: 0.195, y: 0.028, s: 0.855, ms: 1.0 } },
+  { id: "turn-x", len: 0.45, layers: [{ clip: "turn", t0: 0.66 }, { clip: "turn", t0: 0.39, a0: 1, a1: 0 }], cam0: { x: 0.195, y: 0.028, s: 0.855, ms: 1.0 }, cam1: { x: 0.185, y: 0.025, s: 0.865, ms: 1.0 } },
+  { id: "turn-b", len: 1.0, layers: [{ clip: "turn", t0: 0.66, t1: 1 }], cam0: { x: 0.185, y: 0.025, s: 0.865, ms: 1.0 }, cam1: { x: 0.17, y: 0.02, s: 0.88, ms: 1.0 } },
   { id: "explode", len: 2.2, layers: [{ clip: "explode", t0: 0, t1: 1 }], cam0: { x: 0.17, y: 0.02, s: 0.88 }, cam1: { x: 0.03, y: 0.0, s: 0.94 } },
   { id: "explode-hold", len: 1.5, layers: [{ clip: "explode", t0: 1 }], cam0: { x: 0.03, y: 0.0, s: 0.94 }, cam1: { x: 0.02, y: 0.0, s: 0.99 }, ease: easeOut },
   { id: "to-layers", len: 0.55, layers: [{ clip: "layers", t0: 0 }, { clip: "explode", t0: 1, a0: 1, a1: 0 }], cam0: { x: 0.02, y: 0.0, s: 0.99 }, cam1: { x: 0.18, y: 0.04, s: 0.88, my: 0.3 } },
-  // the device holds still, screen on, and the in-device filtering diagram is drawn onto the screen (see aScreens)
-  { id: "layers", len: 2.0, layers: [{ clip: "layers", t0: 0 }], cam0: { x: 0.18, y: 0.04, s: 0.88, my: 0.3 }, cam1: { x: 0.17, y: 0.03, s: 0.96, my: 0.28 } },
-  { id: "layers-hold", len: 1.3, layers: [{ clip: "layers", t0: 0 }], cam0: { x: 0.17, y: 0.03, s: 0.96, my: 0.28 }, cam1: { x: 0.17, y: 0.03, s: 0.98, my: 0.28 }, ease: easeOut },
+  { id: "layers", len: 2.0, layers: [{ clip: "layers", t0: 0, t1: 1 }], cam0: { x: 0.18, y: 0.04, s: 0.88, my: 0.3 }, cam1: { x: 0.18, y: 0.04, s: 0.9, my: 0.3 } },
+  { id: "layers-hold", len: 1.1, layers: [{ clip: "layers", t0: 1 }], cam0: { x: 0.18, y: 0.04, s: 0.9, my: 0.3 }, cam1: { x: 0.18, y: 0.04, s: 0.93, my: 0.3 }, ease: easeOut },
 ] satisfies Beat[]);
 
 const aCopy: Copy[] = [
@@ -88,7 +90,7 @@ const aCopy: Copy[] = [
   {
     id: "turn",
     in: A.start("turn") + 0.55,
-    out: A.end("turn") - 0.05,
+    out: A.end("turn-b") - 0.05,
     className: `${DESK_START} lg:top-[30vh] lg:max-w-[30rem]`,
     still: "turn-last",
     node: (
@@ -118,7 +120,7 @@ const aCopy: Copy[] = [
     in: A.start("layers") + 0.3,
     out: Infinity,
     className: `${DESK_START} lg:top-[max(6rem,calc(50%-17rem))] lg:max-w-[30rem]`,
-    still: "layers-first",
+    still: "layers-last",
     node: (
       <div>
         <p className="act">Inside the device</p>
@@ -178,23 +180,10 @@ const aCallouts: Callout[] = [
   },
 ];
 
-/* the screen of the "layers" frame, measured on the frame: left 24.7%, top 18.9%, 45.9% wide, 56.9% tall */
-const aScreens: Screen[] = [
-  {
-    id: "inside",
-    u: 0.247,
-    v: 0.189,
-    w: 0.459,
-    h: 0.569,
-    in: A.start("layers") + 0.05,
-    out: Infinity,
-    node: <InsideDiagram at={A.start("layers") + 0.35} step={0.3} />,
-  },
-];
 
 export function DeviceFilm() {
   return (
-    <ScrollFilm id="system" label="How Bizmo is built" clips={A_CLIPS} tl={A} copy={aCopy} callouts={aCallouts} screens={aScreens} tail={0.5} glow={{ until: A.start("turn") }} />
+    <ScrollFilm id="system" label="How Bizmo is built" clips={A_CLIPS} tl={A} copy={aCopy} callouts={aCallouts} tail={0.5} glow={{ until: A.start("turn") }} />
   );
 }
 
