@@ -11,7 +11,7 @@
  *   5 MP front camera, LED flash, sensors (accelerometer, light, e-compass, gyroscope).
  *   Still out: talk time or calls (VoIP positioning), Android version, Google Play (approval pending).
  * - Do not mention price, "one price", "no monthly fees" or anything about billing.
- * - Do not say "no browser". Say "pre-approved app list, more apps added on request".
+ * - Do not say "no browser". Say "pre-approved app list, apps added upon request".
  * - Do not use the number 190, or any app count. Say "hundreds of work apps".
  * - Allowed since 21 Oct 2026: works internationally, eSIM, Android Auto.
  * - Never mention Google Play/GMS, Android version, launch dates, or Safe Telecom.
@@ -43,20 +43,20 @@ export const legalNav = [
 
 export const hero = {
   title: ["Built for Business.", "Built Kosher."],
-  lead: "Bizmo is the first and only work device that is built for business and built kosher. Its own operating system, a pre-approved list of business apps, zero distractions, and Rabbinically certified.",
+  lead: "Bizmo is the first and only work device that is built for business and built kosher. Bizmo has its own operating system, a pre-approved list of business apps, and is Rabbinically certified. Zero distraction.",
   tagline: site.tagline,
   cta: "Get notified at launch",
   status: "The kosher business device. Entering production now.",
   facts: [
     ["System", "Its own, from its own source code"],
-    ["Apps", "Hundreds approved, more on request"],
+    ["Apps", "Hundreds approved. Apps added upon request."],
     ["Certified", "Rabbinically certified"],
   ],
 };
 
 export const turn = {
-  title: "Recognisable across the room.",
-  body: "Bizmo is visually distinct, so anyone can see it is a kosher device. It does not look like any other device, because it is not one.",
+  title: "Recognizable across the room.",
+  body: "It does not look like any other device because it is not. Bizmo is visually distinct, so anyone can recognize it as a kosher device.",
 };
 
 export const explode = {
@@ -86,12 +86,12 @@ export const layers = {
 export const apps = {
   title: "Hundreds of work apps",
   titleSecond: "already approved.",
-  titleThird: "More added on request.",
+  titleThird: "Apps added upon request.",
   body: "Bizmo runs a pre-approved list of business apps: banking, payments, Microsoft and Google work apps, phone-over-internet, security cameras, printing, transit and community apps. Zero distractions.",
   request: {
     kicker: "Need an app?",
-    title: "Pre-approved app list. More apps added on request.",
-    body: "Any business-related app can be approved, and the list keeps growing. Tell your dealer what your business runs on, and it's added.",
+    title: "Pre-approved app list. Apps added upon request.",
+    body: "Any business-related app can be approved. Tell your dealer what your business runs on, and it's added.",
     cta: "Request an app",
   },
   control: {
@@ -264,23 +264,23 @@ export const specs = {
 export const trust = {
   title: "Certified by Vaad HaKehilos.",
   titleSecond: "Tested by dozens of satisfied users.",
-  body: "Rabbinically certified, and customizable to your own satisfaction. Every Bizmo can be set to the standard your community, institution or business asks for.",
+  body: "Rabbinically certified, and customizable to your own satisfaction. Every Bizmo can be set to the standard of your community, institution or business.",
 };
 
 /* ------------------------------------------------------------------ comparison */
 
 export const compare = {
-  title: ["Built kosher,", "not filtered after the fact."],
-  body: "The real alternative to Bizmo is an ordinary device with a filter subscription. Here is how they differ.",
+  title: ["Built kosher,", "not filtered."],
+  body: "The alternative to Bizmo is an ordinary device with a filter subscription. Here is how they differ.",
   head: ["", "Ordinary device with a filter", "Bizmo"],
   headSub: ["", "A filter added on top", "The kosher business device"],
   // [topic, with a filter, Bizmo, icon]
   rows: [
     ["Filtering", "Covers mostly the web browser", "Built into every app, inside the device", "filter"],
-    ["Apps", "Everything stays open to distraction", "Pre-approved business apps, more on request", "apps"],
+    ["Apps", "Everything stays open to distraction", "Pre-approved business apps. Apps added upon request.", "apps"],
     ["Control", "The filter company decides what is blocked", "Full control over every app, set to your standard", "control"],
     ["Speed", "Slowed by a proxy server", "Native speed, no proxy", "speed"],
-    ["Appearance", "Looks like any device", "Visually distinct, recognisable as kosher", "eye"],
+    ["Appearance", "Looks like any device", "Visually distinct, recognizable as kosher", "eye"],
     ["Protection", "Can be bypassed", "Locked bootloader, verified boot, full encryption", "lock"],
     ["Certification", "None", "Certified by Vaad HaKehilos", "certified"],
   ] as [string, string, string, string][],
