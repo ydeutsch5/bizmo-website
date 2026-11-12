@@ -264,7 +264,7 @@ export const specs = {
 export const trust = {
   title: "Certified by Vaad HaKehilos.",
   titleSecond: "Tested by dozens of satisfied users.",
-  body: "Rabbinically certified, and customizable to your own satisfaction. Every Bizmo can be set to the standard of your community, institution or business.",
+  body: "Rabbinically certified. Every Bizmo can be set to the standard of your community, institution or business.",
 };
 
 /* ------------------------------------------------------------------ comparison */
