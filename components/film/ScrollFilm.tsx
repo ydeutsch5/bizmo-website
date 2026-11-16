@@ -103,6 +103,13 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
     const ctx = canvas.getContext("2d", { alpha: false })!;
     const copyEls = new Map<string, HTMLElement>();
     stage.querySelectorAll<HTMLElement>("[data-copy]").forEach((el) => copyEls.set(el.dataset.copy!, el));
+    const copyParts = new Map<string, HTMLElement[]>();
+    copyEls.forEach((el, key) => {
+      const root = el.children.length === 1 ? el.firstElementChild! : el;
+      const parts = (Array.from(root.children) as HTMLElement[]).filter((n) => !n.hasAttribute("data-reveal-at"));
+      // blocks whose lines already animate from CSS (the hero's entrance) keep moving as one
+      copyParts.set(key, parts.some((n) => n.matches(".intro-fade, .intro-lines")) ? [] : parts);
+    });
     const calloutEls = new Map<string, HTMLElement>();
     stage.querySelectorAll<HTMLElement>("[data-callout]").forEach((el) => calloutEls.set(el.dataset.callout!, el));
     const screenEls = new Map<string, HTMLElement>();
@@ -117,7 +124,9 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
     let alive = true;
     let started = false;
     let setName: "lg" | "sm" = "lg";
-    let steer = 0.05; // smoothed pointer-driven position for "mouse" layers
+    let steer = 0.05; // sprung pointer-driven position for "mouse" layers
+    let steerV = 0;
+    let lastT = performance.now();
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches; // nothing moves on its own
     const debug = new URLSearchParams(location.search).get("debug") === "1";
     const dbg = debug ? Object.assign(document.createElement("pre"), { className: "film-debug" }) : null;
@@ -190,7 +199,13 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       const idle = !over && now - pointer.moved > 2200;
       const tilt = 0.34 * smooth((pointer.x - 0.22) / 0.72);
       const steerTarget = calm ? 0.05 : idle ? 0.05 + 0.05 * Math.sin(now / 1700) : over ? lerp(tilt, 1, smooth((u - 0.34) / 0.3)) : tilt;
-      steer += (steerTarget - steer) * (idle ? 0.03 : 0.085);
+      // a light spring rather than a plain ease: quicker to follow the hand, and it settles with a little weight
+      const dt = Math.min(0.05, Math.max(0.001, (now - lastT) / 1000));
+      lastT = now;
+      const stiff = idle ? 6 : 150;
+      const damp = 2 * Math.sqrt(stiff) * (idle ? 1 : 0.74);
+      steerV += (stiff * (steerTarget - steer) - damp * steerV) * dt;
+      steer += steerV * dt;
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.fillStyle = STAGE;
@@ -244,9 +259,21 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
         const el = copyEls.get(c.id);
         if (!el) continue;
         const o = opacityAt(p, c.in, c.out);
-        el.style.opacity = o.toFixed(3);
-        el.style.transform = `translate3d(0, ${((1 - o) * 18).toFixed(1)}px, 0)`;
         el.style.visibility = o < 0.01 ? "hidden" : "visible";
+        // the lines of a block come in one after another (label, headline, body...) and leave the same way
+        const parts = copyParts.get(c.id) ?? [];
+        if (parts.length > 1) {
+          el.style.opacity = "1";
+          const step = 0.5 / (parts.length - 1);
+          parts.forEach((part, i) => {
+            const po = smooth(o * 1.5 - i * step);
+            part.style.opacity = po > 0.999 ? "" : po.toFixed(3);
+            part.style.transform = po > 0.999 ? "" : `translate3d(0, ${((1 - po) * 26).toFixed(1)}px, 0)`;
+          });
+        } else {
+          el.style.opacity = o.toFixed(3);
+          el.style.transform = `translate3d(0, ${((1 - o) * 18).toFixed(1)}px, 0)`;
+        }
         const inert = o < 0.5;
         if (el.inert !== inert) el.inert = inert;
         if (o > 0.01)

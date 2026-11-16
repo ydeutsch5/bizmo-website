@@ -30,10 +30,10 @@ export default function Intro() {
     const start = performance.now();
 
     const onProgress = (e: Event) => {
-      const d = (e as CustomEvent<{ key: string; loaded: number; total: number }>).detail;
+      const d = (e as CustomEvent<{ key: string; opening: number; openingTotal: number }>).detail;
       if (d.key !== "turn") return;
-      // the hero needs the first quarter of the film; the rest keeps loading behind the page
-      target = Math.max(target, Math.min(1, d.loaded / Math.max(1, d.total * 0.22)));
+      // the curtain lifts once the whole opening clip is in, so the first scroll plays every frame
+      target = Math.max(target, Math.min(1, d.opening / Math.max(1, d.openingTotal)));
     };
     window.addEventListener("film:progress", onProgress);
 
@@ -50,8 +50,8 @@ export default function Intro() {
 
     const tick = (now: number) => {
       const elapsed = now - start;
-      // never hold anyone longer than 4 seconds
-      const floor = Math.min(1, elapsed / 4000);
+      // never hold anyone longer than 5 seconds
+      const floor = Math.min(1, elapsed / 5000);
       const goal = Math.max(target, floor);
       shown += (goal - shown) * 0.08;
       if (count.current) count.current.textContent = String(Math.round(shown * 100)).padStart(3, "0");

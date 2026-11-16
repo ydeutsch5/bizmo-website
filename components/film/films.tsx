@@ -22,6 +22,8 @@ const A = timeline([
   { id: "hero-out", len: 0.45, layers: [{ clip: "turn", t0: "mouse", t1: 0.36, m0: 0.2, m1: 0.36 }], cam0: R, cam1: { x: 0.2, y: 0.03, s: 0.85, ms: 1.0 } },
   // one device, one pose per frame: the turn clip is built from the studio stills (scripts/turn-frames.py)
   { id: "turn", len: 1.6, layers: [{ clip: "turn", t0: 0.36, t1: 1 }], cam0: { x: 0.2, y: 0.03, s: 0.85, ms: 1.0 }, cam1: { x: 0.17, y: 0.02, s: 0.88, ms: 1.0 } },
+  // a beat of stillness on the finished back before it opens
+  { id: "turn-hold", len: 0.4, layers: [{ clip: "turn", t0: 1 }], cam0: { x: 0.17, y: 0.02, s: 0.88, ms: 1.0 }, cam1: { x: 0.17, y: 0.02, s: 0.88, ms: 0.88 } },
   { id: "explode", len: 2.2, layers: [{ clip: "explode", t0: 0, t1: 1 }], cam0: { x: 0.17, y: 0.02, s: 0.88 }, cam1: { x: 0.03, y: 0.0, s: 0.94 } },
   { id: "explode-hold", len: 1.5, layers: [{ clip: "explode", t0: 1 }], cam0: { x: 0.03, y: 0.0, s: 0.94 }, cam1: { x: 0.02, y: 0.0, s: 0.99 }, ease: easeOut },
   { id: "to-layers", len: 0.55, layers: [{ clip: "layers", t0: 0 }, { clip: "explode", t0: 1, a0: 1, a1: 0 }], cam0: { x: 0.02, y: 0.0, s: 0.99 }, cam1: { x: 0.18, y: 0.04, s: 0.88, my: 0.3 } },
@@ -86,8 +88,8 @@ const aCopy: Copy[] = [
   },
   {
     id: "turn",
-    in: A.start("turn") + 0.55,
-    out: A.end("turn") - 0.05,
+    in: A.start("turn") + 0.8, // as the back comes round
+    out: A.end("turn-hold") - 0.05,
     className: `${DESK_START} lg:top-[30vh] lg:max-w-[30rem]`,
     still: "turn-last",
     node: (

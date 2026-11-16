@@ -137,6 +137,8 @@ export class FrameStore {
   private focus: { clip: ClipId; i: number } | null = null;
   loaded = 0;
   total = 0;
+  /** frames loaded of the first clip */
+  opening = 0;
 
   constructor(
     private m: Manifest,
@@ -163,8 +165,13 @@ export class FrameStore {
       this.enqueue(c, 0);
       this.enqueue(c, this.count(c) - 1);
     }
-    for (const c of this.clips) for (let i = 4; i < this.count(c) - 1; i += 4) this.enqueue(c, i);
-    for (const c of this.clips) for (let i = 1; i < this.count(c) - 1; i++) if (i % 4) this.enqueue(c, i);
+    // the opening clip first and in full (every 4th frame, then the rest), so the first scroll is
+    // never played from a thinned-out set; then the same for the clips that follow
+    for (const c of this.clips) {
+      for (let i = 4; i < this.count(c) - 1; i += 4) this.enqueue(c, i);
+      if (c === this.clips[0]) for (let i = 1; i < this.count(c) - 1; i++) if (i % 4) this.enqueue(c, i);
+    }
+    for (const c of this.clips.slice(1)) for (let i = 1; i < this.count(c) - 1; i++) if (i % 4) this.enqueue(c, i);
     this.pump();
   }
 
@@ -207,7 +214,10 @@ export class FrameStore {
         if (ok) {
           this.ready.add(k);
           this.loaded++;
-          window.dispatchEvent(new CustomEvent("film:progress", { detail: { key: this.clips[0], loaded: this.loaded, total: this.total } }));
+          if (clip === this.clips[0]) this.opening++;
+          window.dispatchEvent(
+            new CustomEvent("film:progress", { detail: { key: this.clips[0], loaded: this.loaded, total: this.total, opening: this.opening, openingTotal: this.count(this.clips[0]) } }),
+          );
         } else this.imgs.delete(k);
         this.pump();
       };
