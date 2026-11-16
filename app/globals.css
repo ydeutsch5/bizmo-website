@@ -482,3 +482,42 @@ html.is-turning * {
   user-select: none !important;
   -webkit-user-select: none !important;
 }
+
+/* over the hero device the cursor ring opens up and says what to do; while turning it closes on the hand */
+html.can-turn .cursor-ring-inner {
+  position: relative;
+  width: 78px;
+  height: 78px;
+  margin: -39px 0 0 -39px;
+  border-color: rgb(45 218 255 / 0.75);
+  background: rgb(45 218 255 / 0.07);
+}
+html.can-turn .cursor-ring-inner::after {
+  content: "Drag";
+  position: absolute;
+  top: calc(50% + 9px);
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.56rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(207 238 255 / 0.9);
+}
+html.is-turning .cursor-ring-inner {
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  background: rgb(45 218 255 / 0.14);
+}
+html.is-turning .cursor-ring-inner::after {
+  content: none;
+}
+.turn-hint-icon {
+  animation: turn-hint 2.6s var(--ease-out-soft) infinite;
+}
+@keyframes turn-hint {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(90deg) scale(1.12); }
+}

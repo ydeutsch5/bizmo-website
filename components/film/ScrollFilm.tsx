@@ -145,45 +145,52 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
     let alive = true;
     let started = false;
     let setName: "lg" | "sm" = "lg";
-    // The hero device: how far over it is (0 front .. 1 back), on a spring. Hovering only tips it a
-    // few degrees towards the pointer. Pressing on it and dragging up or down turns it by hand, and it
-    // settles on whichever face is nearer when let go; a plain click flips it.
-    let steer = 0.02;
-    let steerV = 0;
+    // The hero device is turned by hand. `spin` counts half turns: 0 is the front, 1 the back, 2 the
+    // front again, and so on in both directions, so a drag any way (up, down, left, right) turns it and
+    // can keep turning. Let go and it carries on a little with the speed of the hand, then settles on
+    // the nearest face. A click turns it once. Hovering only tips it a few degrees towards the pointer.
+    let spin = 0.02;
+    let spinV = 0;
+    let rest = 0; // the face (whole number of half turns) it settles on
+    let steer = 0.02; // 0 front .. 1 back, folded out of spin
     let lastT = performance.now();
-    let face: 0 | 1 = 0;
-    let drag: { x0: number; y0: number; x: number; y: number; a0: number; axis: "x" | "y" | null } | null = null;
+    let drag: { x0: number; y0: number; x: number; y: number; p0: number; axis: "x" | "y" | null } | null = null;
     let heroLive = false;
     let hinted = false;
     let lastBox: ReturnType<typeof placement> | null = null;
     const hasMouse = tl.beats.some((b) => b.layers.some((L) => L.t0 === "mouse"));
+    const html = document.documentElement;
+    const onDevice = (x: number, y: number) => {
+      if (!heroLive || !lastBox) return false;
+      const u = (x - lastBox.dx) / lastBox.dw; // the device sits at u .23-.77, v .16-.78 of the frame
+      const v = (y - lastBox.dy) / lastBox.dh;
+      return u > 0.21 && u < 0.79 && v > 0.13 && v < 0.81;
+    };
     const endDrag = () => {
       drag = null;
-      document.documentElement.classList.remove("is-turning");
+      html.classList.remove("is-turning");
     };
     const onDown = (e: PointerEvent) => {
-      if (!heroLive || !lastBox || e.pointerType !== "mouse" || e.button !== 0) return;
+      if (e.pointerType !== "mouse" || e.button !== 0 || !onDevice(e.clientX, e.clientY)) return;
       if ((e.target as Element | null)?.closest?.("a, button, input, textarea, select, label")) return;
-      const u = (e.clientX - lastBox.dx) / lastBox.dw; // the device sits at u .23-.77, v .16-.78 of the frame
-      const v = (e.clientY - lastBox.dy) / lastBox.dh;
-      if (u < 0.22 || u > 0.78 || v < 0.14 || v > 0.8) return;
       e.preventDefault();
-      drag = { x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, a0: steer, axis: null };
+      drag = { x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, p0: spin, axis: null };
       hinted = true;
-      document.documentElement.classList.add("is-turning");
+      html.classList.add("is-turning");
       kick();
     };
     const onMove = (e: PointerEvent) => {
+      if (hasMouse && e.pointerType === "mouse") html.classList.toggle("can-turn", !!drag || onDevice(e.clientX, e.clientY));
       if (!drag) return;
       drag.x = e.clientX;
       drag.y = e.clientY;
       // the drag follows whichever way the hand set off, up-down or sideways, and keeps to it
-      if (!drag.axis && Math.hypot(drag.x - drag.x0, drag.y - drag.y0) > 8) drag.axis = Math.abs(drag.x - drag.x0) > Math.abs(drag.y - drag.y0) ? "x" : "y";
+      if (!drag.axis && Math.hypot(drag.x - drag.x0, drag.y - drag.y0) > 6) drag.axis = Math.abs(drag.x - drag.x0) > Math.abs(drag.y - drag.y0) ? "x" : "y";
     };
     const onUp = () => {
       if (!drag) return;
-      if (!drag.axis) face = face ? 0 : 1; // a click
-      else face = steer + steerV * 0.12 > 0.5 ? 1 : 0;
+      if (!drag.axis) rest = Math.round(spin) + 1; // a click: one turn
+      else rest = Math.round(spin + spinV * 0.28); // a flick carries it over to the next face
       endDrag();
     };
     if (hasMouse) {
@@ -258,22 +265,25 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       lastBox = box;
       heroLive = hasMouse && !view.mobile && !calm && beat.id === "hero" && k < 0.04;
       if (!heroLive) {
-        // once the page scrolls, the scroll owns the turn: back to the front, hands off
+        // once the page scrolls, the scroll owns the turn: hands off, and round to the nearest front
         if (drag) endDrag();
-        face = 0;
+        rest = 2 * Math.round(spin / 2);
+        html.classList.remove("can-turn");
       }
       const idle = !drag && now - pointer.moved > 2200;
       // the device faces the pointer a little: higher on the screen tips its top away, a few degrees at most
       const tilt = calm ? 0.02 : idle ? 0.02 + 0.012 * Math.sin(now / 1700) : 0.012 + 0.05 * smooth(1 - pointer.y);
-      let steerTarget = face ? 1 - tilt * 0.6 : tilt;
-      // dragging: about one device height of travel is the whole flip. Up or right turns it over, down or left brings it back
-      if (drag) steerTarget = drag.axis ? clamp01(drag.a0 + (drag.axis === "x" ? drag.x - drag.x0 : drag.y0 - drag.y) / (box.dh * 0.56)) : drag.a0;
+      let spinTarget = rest + (rest % 2 === 0 ? tilt : tilt * 0.6);
+      // dragging: about half a device height of travel is one turn, in whichever direction the hand goes
+      if (drag) spinTarget = drag.axis ? drag.p0 + (drag.axis === "x" ? drag.x - drag.x0 : drag.y0 - drag.y) / (box.dh * 0.3) : drag.p0;
       const dt = Math.min(0.05, Math.max(0.001, (now - lastT) / 1000));
       lastT = now;
-      const stiff = drag ? 260 : idle ? 8 : 32;
-      const damp = 2 * Math.sqrt(stiff); // critically damped: follows without bouncing
-      steerV += (stiff * (steerTarget - steer) - damp * steerV) * dt;
-      steer = clamp01(steer + steerV * dt);
+      const stiff = drag ? 300 : idle ? 8 : 38;
+      const damp = 2 * Math.sqrt(stiff) * (drag || idle ? 1 : 0.78); // let go, it settles with a little life
+      spinV += (stiff * (spinTarget - spin) - damp * spinV) * dt;
+      spin += spinV * dt;
+      const fold = ((spin % 2) + 2) % 2;
+      steer = fold > 1 ? 2 - fold : fold;
       const steerClip = angleToClip(steer);
 
       if (hasMouse && hintRef.current) {
@@ -443,6 +453,7 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
         window.removeEventListener("pointerup", onUp);
         window.removeEventListener("pointercancel", onUp);
         endDrag();
+        html.classList.remove("can-turn");
       }
     };
   }, [clips, tl, copy, callouts, screens, tail]);
@@ -500,10 +511,10 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
         {tl.beats.some((b) => b.layers.some((L) => L.t0 === "mouse")) && (
           <div ref={hintRef} aria-hidden="true" className="pointer-events-none absolute top-0 left-0 z-[1] hidden opacity-0 transition-opacity duration-700 lg:block">
             <span className="flex items-center gap-2 rounded-full border border-white/10 bg-night/55 px-3.5 py-1.5 text-[0.68rem] font-medium tracking-[0.16em] whitespace-nowrap text-aluminium/80 uppercase backdrop-blur">
-              <svg viewBox="0 0 12 16" className="h-3.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 1.5v13M2.5 5 6 1.5 9.5 5M2.5 11 6 14.5 9.5 11" />
+              <svg viewBox="0 0 16 16" className="turn-hint-icon h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 1.5v13M1.5 8h13M5.8 3.7 8 1.5l2.2 2.2M5.8 12.3 8 14.5l2.2-2.2M3.7 5.8 1.5 8l2.2 2.2M12.3 5.8 14.5 8l-2.2 2.2" />
               </svg>
-              Drag to flip
+              Drag to turn
             </span>
           </div>
         )}
