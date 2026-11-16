@@ -18,6 +18,7 @@ import {
   type Manifest,
   type View,
   type timeline,
+  FILM_VERSION,
 } from "@/lib/film/engine";
 
 export type Copy = {
@@ -145,7 +146,7 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
         posters.set(c, im);
         kick();
       };
-      im.src = `/film/stills/${c}-first.webp`;
+      im.src = `/film/stills/${c}-first.webp?v=${FILM_VERSION}`;
     }
 
     const ensureStore = () => {
@@ -418,7 +419,7 @@ function StaticFilm({ id, label, copy, callouts = [] }: FilmProps) {
                 )}
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`/film/stills/${c.still}.webp`} alt="" loading="lazy" width={1600} height={900} className="h-auto w-full rounded-[1.25rem]" />
+              <img src={`/film/stills/${c.still}.webp?v=${FILM_VERSION}`} alt="" loading="lazy" width={1600} height={900} className="h-auto w-full rounded-[1.25rem]" />
             </div>
           );
         })}

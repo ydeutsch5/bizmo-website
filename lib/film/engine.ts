@@ -1,3 +1,4 @@
+import filmManifest from "@/public/film/manifest.json";
 /**
  * Scroll film engine.
  *
@@ -112,12 +113,11 @@ export function trackPointer() {
 
 /* ------------------------------------------------------------------ manifest */
 
-let manifestPromise: Promise<Manifest | null> | null = null;
-export function loadManifest() {
-  manifestPromise ??= fetch("/film/manifest.json")
-    .then((r) => (r.ok ? (r.json() as Promise<Manifest>) : null))
-    .catch(() => null);
-  return manifestPromise;
+// The manifest is compiled into the page instead of fetched: everything under /film/ is cached for a
+// year, so a fetched manifest would keep returning visitors on the old frame version for ever.
+export const FILM_VERSION = (filmManifest as Manifest).version;
+export function loadManifest(): Promise<Manifest | null> {
+  return Promise.resolve(filmManifest as Manifest);
 }
 
 /* ------------------------------------------------------------------ frame store */
