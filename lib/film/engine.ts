@@ -8,7 +8,7 @@ import filmManifest from "@/public/film/manifest.json";
  * plays everything in reverse for free.
  */
 
-export type ClipId = "hero" | "turn" | "explode" | "layers" | "camera" | "edge" | "logo";
+export type ClipId = "hero" | "turn" | "explode" | "inside" | "camera" | "edge" | "logo";
 
 export type Manifest = {
   version: number;

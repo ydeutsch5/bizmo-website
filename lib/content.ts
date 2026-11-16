@@ -78,6 +78,9 @@ export const layers = {
     { id: "verified", label: "Verified boot", sub: "Full encryption" },
     { id: "boot", label: "Secure boot", sub: "Locked bootloader" },
   ],
+  sealed: "Sealed inside · locked at the firmware",
+  sealedShort: "Locked at the firmware",
+  icons: ["chase", "docusign", "capital-one", "dropbox"],
 
 };
 

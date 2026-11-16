@@ -1,5 +1,5 @@
 {
-  "version": 1794858575074,
+  "version": 1794867158056,
   "fps": 24,
   "pattern": "/film/{set}/{clip}/{index}.webp",
   "pad": 4,
@@ -17,9 +17,6 @@
     "explode": {
       "count": 145
     },
-    "layers": {
-      "count": 121
-    },
     "camera": {
       "count": 121
     },
@@ -28,6 +25,9 @@
     },
     "logo": {
       "count": 75
+    },
+    "inside": {
+      "count": 1
     }
   }
 }
