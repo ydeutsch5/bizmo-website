@@ -152,7 +152,7 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
     let steerV = 0;
     let lastT = performance.now();
     let face: 0 | 1 = 0;
-    let drag: { y0: number; y: number; a0: number } | null = null;
+    let drag: { x0: number; y0: number; x: number; y: number; a0: number; axis: "x" | "y" | null } | null = null;
     let heroLive = false;
     let hinted = false;
     let lastBox: ReturnType<typeof placement> | null = null;
@@ -168,17 +168,21 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       const v = (e.clientY - lastBox.dy) / lastBox.dh;
       if (u < 0.22 || u > 0.78 || v < 0.14 || v > 0.8) return;
       e.preventDefault();
-      drag = { y0: e.clientY, y: e.clientY, a0: steer };
+      drag = { x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, a0: steer, axis: null };
       hinted = true;
       document.documentElement.classList.add("is-turning");
       kick();
     };
     const onMove = (e: PointerEvent) => {
-      if (drag) drag.y = e.clientY;
+      if (!drag) return;
+      drag.x = e.clientX;
+      drag.y = e.clientY;
+      // the drag follows whichever way the hand set off, up-down or sideways, and keeps to it
+      if (!drag.axis && Math.hypot(drag.x - drag.x0, drag.y - drag.y0) > 8) drag.axis = Math.abs(drag.x - drag.x0) > Math.abs(drag.y - drag.y0) ? "x" : "y";
     };
     const onUp = () => {
       if (!drag) return;
-      if (Math.abs(drag.y - drag.y0) < 6) face = face ? 0 : 1; // a click
+      if (!drag.axis) face = face ? 0 : 1; // a click
       else face = steer + steerV * 0.12 > 0.5 ? 1 : 0;
       endDrag();
     };
@@ -262,8 +266,8 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       // the device faces the pointer a little: higher on the screen tips its top away, a few degrees at most
       const tilt = calm ? 0.02 : idle ? 0.02 + 0.012 * Math.sin(now / 1700) : 0.012 + 0.05 * smooth(1 - pointer.y);
       let steerTarget = face ? 1 - tilt * 0.6 : tilt;
-      // dragging: about one device height of travel is the whole flip, up turns it over, down brings it back
-      if (drag) steerTarget = clamp01(drag.a0 + (drag.y0 - drag.y) / (box.dh * 0.56));
+      // dragging: about one device height of travel is the whole flip. Up or right turns it over, down or left brings it back
+      if (drag) steerTarget = drag.axis ? clamp01(drag.a0 + (drag.axis === "x" ? drag.x - drag.x0 : drag.y0 - drag.y) / (box.dh * 0.56)) : drag.a0;
       const dt = Math.min(0.05, Math.max(0.001, (now - lastT) / 1000));
       lastT = now;
       const stiff = drag ? 260 : idle ? 8 : 32;
