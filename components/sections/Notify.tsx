@@ -46,7 +46,7 @@ export default function Notify() {
       <div className="wrap relative grid gap-14 py-28 md:grid-cols-[minmax(0,6fr)_minmax(0,6fr)] md:gap-20 md:py-44">
         <div className="max-w-[34rem]">
           <p className="act" data-reveal>
-            Act VII <span className="px-2 text-dim">/</span> Launch
+            Act VIII <span className="px-2 text-dim">/</span> Launch
           </p>
           <h2 id="notify-title" className="display display-lg mt-8 text-white" data-reveal-lines>
             <span className="line-mask">

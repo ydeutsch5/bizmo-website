@@ -31,6 +31,7 @@ export const nav = [
   { href: "#system", label: "How it works" },
   { href: "#apps", label: "Apps" },
   { href: "#specs", label: "Tech specs" },
+  { href: "#compare", label: "Compare" },
 ];
 
 export const legalNav = [

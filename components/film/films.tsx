@@ -2,7 +2,7 @@
 
 import ScrollFilm, { type Callout, type Copy } from "./ScrollFilm";
 import { easeOut, timeline, type Beat, type ClipId } from "@/lib/film/engine";
-import { camera, display, explode, hero, layers, trust, turn } from "@/lib/content";
+import { camera, display, explode, hero, trust, turn } from "@/lib/content";
 
 /*
   Camera values: x/y shift the frame centre (fraction of the viewport), s scales it (1 = cover).
@@ -13,7 +13,7 @@ const DESK_START = "lg:start-[clamp(1.5rem,5.5vw,6.5rem)]";
 
 /* ================================================================== Act I: the device */
 
-const A_CLIPS: ClipId[] = ["turn", "explode", "layers"];
+const A_CLIPS: ClipId[] = ["turn", "explode"];
 const R = { x: 0.2, y: 0.03, s: 0.8, ms: 1.0 }; // device framed to the right of the headline; larger on phones
 
 const A = timeline([
@@ -26,9 +26,6 @@ const A = timeline([
   { id: "turn-hold", len: 0.4, layers: [{ clip: "turn", t0: 1 }], cam0: { x: 0.17, y: 0.02, s: 0.88, ms: 1.0 }, cam1: { x: 0.17, y: 0.02, s: 0.88, ms: 0.88 } },
   { id: "explode", len: 2.2, layers: [{ clip: "explode", t0: 0, t1: 1 }], cam0: { x: 0.17, y: 0.02, s: 0.88 }, cam1: { x: 0.03, y: 0.0, s: 0.94 } },
   { id: "explode-hold", len: 1.5, layers: [{ clip: "explode", t0: 1 }], cam0: { x: 0.03, y: 0.0, s: 0.94 }, cam1: { x: 0.02, y: 0.0, s: 0.99 }, ease: easeOut },
-  { id: "to-layers", len: 0.55, layers: [{ clip: "layers", t0: 0 }, { clip: "explode", t0: 1, a0: 1, a1: 0 }], cam0: { x: 0.02, y: 0.0, s: 0.99 }, cam1: { x: 0.18, y: 0.04, s: 0.88, my: 0.3 } },
-  { id: "layers", len: 2.0, layers: [{ clip: "layers", t0: 0, t1: 1 }], cam0: { x: 0.18, y: 0.04, s: 0.88, my: 0.3 }, cam1: { x: 0.18, y: 0.04, s: 0.9, my: 0.3 } },
-  { id: "layers-hold", len: 1.1, layers: [{ clip: "layers", t0: 1 }], cam0: { x: 0.18, y: 0.04, s: 0.9, my: 0.3 }, cam1: { x: 0.18, y: 0.04, s: 0.93, my: 0.3 }, ease: easeOut },
 ] satisfies Beat[]);
 
 const aCopy: Copy[] = [
@@ -103,7 +100,7 @@ const aCopy: Copy[] = [
   {
     id: "explode",
     in: A.start("explode-hold") - 0.35,
-    out: A.end("explode-hold") - 0.05,
+    out: Infinity,
     className: `${DESK_START} lg:bottom-[8vh] lg:max-w-[32rem]`,
     still: "explode-last",
     node: (
@@ -111,34 +108,6 @@ const aCopy: Copy[] = [
         <p className="act">Its own operating system</p>
         <h2 className="display display-md mt-4 text-white">{explode.title}</h2>
         <p className="mt-5 text-aluminium/75">{explode.body}</p>
-      </div>
-    ),
-  },
-  {
-    id: "layers",
-    in: A.start("layers") + 0.3,
-    out: Infinity,
-    className: `${DESK_START} lg:top-[max(6rem,calc(50%-17rem))] lg:max-w-[30rem]`,
-    still: "layers-last",
-    node: (
-      <div>
-        <p className="act">Inside the device</p>
-        <h2 className="display display-md mt-4 text-white">{layers.title}</h2>
-        <p className="mt-5 text-aluminium/75 max-lg:hidden">{layers.body}</p>
-        <ol className="mt-8 border-s border-white/12 max-lg:mt-4">
-          {layers.stack.map((l, i) => (
-            <li
-              key={l.id}
-              data-reveal-at={A.start("layers") + 0.55 + i * 0.38}
-              className="relative py-2.5 ps-6 max-lg:py-1"
-              style={{ opacity: 0.18 }}
-            >
-              <span aria-hidden="true" className="absolute top-1/2 -start-[4.5px] h-2 w-2 -translate-y-1/2 rounded-full bg-gradient-to-tr from-cobalt to-cyan shadow-[0_0_10px_rgb(45_218_255/0.8)]" />
-              <span className="block text-white">{l.label}</span>
-              <span className="block text-[0.88rem] text-mist max-lg:hidden">{l.sub}</span>
-            </li>
-          ))}
-        </ol>
       </div>
     ),
   },
@@ -152,7 +121,7 @@ const aCallouts: Callout[] = [
     side: "left",
     reach: 0.15,
     in: A.start("explode-hold") - 0.15,
-    out: A.end("explode-hold") - 0.1,
+    out: Infinity,
     label: explode.callouts.processor.label,
     sub: explode.callouts.processor.sub,
   },
@@ -163,7 +132,7 @@ const aCallouts: Callout[] = [
     side: "left",
     reach: 0.12,
     in: A.start("explode-hold") + 0.05,
-    out: A.end("explode-hold") - 0.1,
+    out: Infinity,
     label: explode.callouts.camera.label,
     sub: explode.callouts.camera.sub,
   },
@@ -174,7 +143,7 @@ const aCallouts: Callout[] = [
     side: "right",
     reach: 0.035,
     in: A.start("explode-hold") + 0.25,
-    out: A.end("explode-hold") - 0.1,
+    out: Infinity,
     label: explode.callouts.display.label,
   },
 ];

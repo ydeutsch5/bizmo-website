@@ -9,10 +9,11 @@ export const ACTS = [
   { id: "daily", n: "IV", label: "Daily work" },
   { id: "specs", n: "V", label: "Tech specs" },
   { id: "trust", n: "VI", label: "Certification" },
-  { id: "notify", n: "VII", label: "Launch" },
+  { id: "compare", n: "VII", label: "Compare" },
+  { id: "notify", n: "VIII", label: "Launch" },
 ];
 
-/** The chapter rail on the end side: roman numerals for the seven acts and a progress line. */
+/** The chapter rail on the end side: roman numerals for the eight acts and a progress line. */
 export default function Rail() {
   const [active, setActive] = useState(0);
   const bar = useRef<HTMLDivElement>(null);

@@ -9,6 +9,7 @@ import Apps from "@/components/sections/Apps";
 import Speed from "@/components/sections/Speed";
 import HomeScreen from "@/components/sections/HomeScreen";
 import SpecSheet from "@/components/sections/SpecSheet";
+import Compare from "@/components/sections/Compare";
 import Audience from "@/components/sections/Audience";
 import Notify from "@/components/sections/Notify";
 import Footer from "@/components/Footer";
@@ -32,6 +33,7 @@ export default function Home() {
         <DetailFilm />
         <SpecSheet />
         <TrustFilm />
+        <Compare />
         <Audience />
         <Notify />
       </main>
