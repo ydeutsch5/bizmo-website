@@ -20,11 +20,8 @@ const A = timeline([
   // the pointer turns the device (see "mouse" layers in ScrollFilm)
   { id: "hero", len: 1.0, layers: [{ clip: "turn", t0: "mouse", m0: 0.04, m1: 0.2 }], cam0: R, parallax: true },
   { id: "hero-out", len: 0.45, layers: [{ clip: "turn", t0: "mouse", t1: 0.36, m0: 0.2, m1: 0.36 }], cam0: R, cam1: { x: 0.2, y: 0.03, s: 0.85, ms: 1.0 } },
-  // The rendered turn shows a doubled body while the device is edge-on (frames 58-95 of the clip).
-  // Those frames are never shown: the turn plays up to 0.39, dissolves across to 0.66, then plays on.
-  { id: "turn", len: 0.35, layers: [{ clip: "turn", t0: 0.36, t1: 0.39 }], cam0: { x: 0.2, y: 0.03, s: 0.85, ms: 1.0 }, cam1: { x: 0.195, y: 0.028, s: 0.855, ms: 1.0 } },
-  { id: "turn-x", len: 0.45, layers: [{ clip: "turn", t0: 0.66 }, { clip: "turn", t0: 0.39, a0: 1, a1: 0 }], cam0: { x: 0.195, y: 0.028, s: 0.855, ms: 1.0 }, cam1: { x: 0.185, y: 0.025, s: 0.865, ms: 1.0 } },
-  { id: "turn-b", len: 1.0, layers: [{ clip: "turn", t0: 0.66, t1: 1 }], cam0: { x: 0.185, y: 0.025, s: 0.865, ms: 1.0 }, cam1: { x: 0.17, y: 0.02, s: 0.88, ms: 1.0 } },
+  // one device, one pose per frame: the turn clip is built from the studio stills (scripts/turn-frames.py)
+  { id: "turn", len: 1.6, layers: [{ clip: "turn", t0: 0.36, t1: 1 }], cam0: { x: 0.2, y: 0.03, s: 0.85, ms: 1.0 }, cam1: { x: 0.17, y: 0.02, s: 0.88, ms: 1.0 } },
   { id: "explode", len: 2.2, layers: [{ clip: "explode", t0: 0, t1: 1 }], cam0: { x: 0.17, y: 0.02, s: 0.88 }, cam1: { x: 0.03, y: 0.0, s: 0.94 } },
   { id: "explode-hold", len: 1.5, layers: [{ clip: "explode", t0: 1 }], cam0: { x: 0.03, y: 0.0, s: 0.94 }, cam1: { x: 0.02, y: 0.0, s: 0.99 }, ease: easeOut },
   { id: "to-layers", len: 0.55, layers: [{ clip: "layers", t0: 0 }, { clip: "explode", t0: 1, a0: 1, a1: 0 }], cam0: { x: 0.02, y: 0.0, s: 0.99 }, cam1: { x: 0.18, y: 0.04, s: 0.88, my: 0.3 } },
@@ -90,7 +87,7 @@ const aCopy: Copy[] = [
   {
     id: "turn",
     in: A.start("turn") + 0.55,
-    out: A.end("turn-b") - 0.05,
+    out: A.end("turn") - 0.05,
     className: `${DESK_START} lg:top-[30vh] lg:max-w-[30rem]`,
     still: "turn-last",
     node: (
