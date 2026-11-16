@@ -172,7 +172,7 @@ export const daily = {
     { name: "Microsoft Word", short: "W", icon: "microsoft-word" },
     { name: "Square", short: "S", icon: "square" },
     { name: "Waze", short: "W", icon: "waze" },
-    { name: "Ring", short: "R", icon: "ring" },
+    { name: "Arlo", short: "A", icon: "arlo" },
     { name: "E-ZPass", short: "E", icon: "e-zpass" },
     { name: "Phone", short: "", icon: "phone" },
   ],
