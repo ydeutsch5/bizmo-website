@@ -180,9 +180,16 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       const { beat, k } = at;
       let cam = at.cam;
       if (beat.parallax && !view.mobile && !calm) cam = { x: cam.x + (pointer.x - 0.5) * 0.018, y: cam.y + (pointer.y - 0.5) * 0.026, s: cam.s };
-      // the pointer turns the device: left of the screen faces you, moving right turns it towards its edge
-      const idle = now - pointer.moved > 2200;
-      const steerTarget = calm ? 0.05 : idle ? 0.05 + 0.05 * Math.sin(now / 1700) : 0.34 * smooth((pointer.x - 0.22) / 0.72);
+      // The pointer turns the device. Anywhere on the screen it only tilts it a little; moving across
+      // the device itself flips it right over to its back, and back again. Once the page scrolls, the
+      // scroll takes the flip over, so the device eases back to the tilt range first.
+      const box = placement(view, 1600, 900, cam);
+      const u = (pointer.x * W - box.dx) / box.dw; // pointer in frame space; the device sits at u .23-.77, v .16-.78
+      const v = (pointer.y * H - box.dy) / box.dh;
+      const over = !view.mobile && !calm && pointer.moved > 0 && beat.id === "hero" && k < 0.04 && u > 0.2 && u < 0.8 && v > 0.12 && v < 0.82;
+      const idle = !over && now - pointer.moved > 2200;
+      const tilt = 0.34 * smooth((pointer.x - 0.22) / 0.72);
+      const steerTarget = calm ? 0.05 : idle ? 0.05 + 0.05 * Math.sin(now / 1700) : over ? lerp(tilt, 1, smooth((u - 0.34) / 0.3)) : tilt;
       steer += (steerTarget - steer) * (idle ? 0.03 : 0.085);
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
