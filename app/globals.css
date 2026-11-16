@@ -475,3 +475,10 @@ html.menu-open body {
   white-space: pre-wrap;
   pointer-events: none;
 }
+
+/* while the hero device is being turned by hand, nothing on the page gets selected */
+html.is-turning,
+html.is-turning * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}

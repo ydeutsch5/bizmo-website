@@ -70,6 +70,26 @@ export type FilmProps = {
 };
 
 const FADE = 0.32;
+// How far over the device is (0 = front, 1 = back) to clip time, following the pose curve the turn
+// clip was built with (scripts/turn-frames.py: frames 0-52 cover the first 17 degrees).
+const TURN_POSE = Array.from({ length: 145 }, (_, f) => {
+  if (f <= 52) return (3.5 * f) / 52 / 36;
+  const t = (f - 52) / 92;
+  return (3.5 + 32.5 * (0.25 * t + 0.75 * (3 * t * t - 2 * t * t * t))) / 36;
+});
+function angleToClip(a: number) {
+  a = clamp01(a);
+  let lo = 0;
+  let hi = TURN_POSE.length - 1;
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    if (TURN_POSE[mid] <= a) lo = mid;
+    else hi = mid;
+  }
+  const span = TURN_POSE[hi] - TURN_POSE[lo];
+  return (lo + (span > 0 ? (a - TURN_POSE[lo]) / span : 0)) / (TURN_POSE.length - 1);
+}
+
 const opacityAt = (pos: number, a: number, b: number) =>
   Math.min(a < 0 ? 1 : smooth((pos - a) / FADE), b === Infinity ? 1 : smooth((b - pos) / FADE));
 
@@ -95,6 +115,7 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const hintRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current!;
@@ -124,9 +145,49 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
     let alive = true;
     let started = false;
     let setName: "lg" | "sm" = "lg";
-    let steer = 0.05; // sprung pointer-driven position for "mouse" layers
+    // The hero device: how far over it is (0 front .. 1 back), on a spring. Hovering only tips it a
+    // few degrees towards the pointer. Pressing on it and dragging up or down turns it by hand, and it
+    // settles on whichever face is nearer when let go; a plain click flips it.
+    let steer = 0.02;
     let steerV = 0;
     let lastT = performance.now();
+    let face: 0 | 1 = 0;
+    let drag: { y0: number; y: number; a0: number } | null = null;
+    let heroLive = false;
+    let hinted = false;
+    let lastBox: ReturnType<typeof placement> | null = null;
+    const hasMouse = tl.beats.some((b) => b.layers.some((L) => L.t0 === "mouse"));
+    const endDrag = () => {
+      drag = null;
+      document.documentElement.classList.remove("is-turning");
+    };
+    const onDown = (e: PointerEvent) => {
+      if (!heroLive || !lastBox || e.pointerType !== "mouse" || e.button !== 0) return;
+      if ((e.target as Element | null)?.closest?.("a, button, input, textarea, select, label")) return;
+      const u = (e.clientX - lastBox.dx) / lastBox.dw; // the device sits at u .23-.77, v .16-.78 of the frame
+      const v = (e.clientY - lastBox.dy) / lastBox.dh;
+      if (u < 0.22 || u > 0.78 || v < 0.14 || v > 0.8) return;
+      e.preventDefault();
+      drag = { y0: e.clientY, y: e.clientY, a0: steer };
+      hinted = true;
+      document.documentElement.classList.add("is-turning");
+      kick();
+    };
+    const onMove = (e: PointerEvent) => {
+      if (drag) drag.y = e.clientY;
+    };
+    const onUp = () => {
+      if (!drag) return;
+      if (Math.abs(drag.y - drag.y0) < 6) face = face ? 0 : 1; // a click
+      else face = steer + steerV * 0.12 > 0.5 ? 1 : 0;
+      endDrag();
+    };
+    if (hasMouse) {
+      window.addEventListener("pointerdown", onDown);
+      window.addEventListener("pointermove", onMove, { passive: true });
+      window.addEventListener("pointerup", onUp);
+      window.addEventListener("pointercancel", onUp);
+    }
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches; // nothing moves on its own
     const debug = new URLSearchParams(location.search).get("debug") === "1";
     const dbg = debug ? Object.assign(document.createElement("pre"), { className: "film-debug" }) : null;
@@ -189,23 +250,35 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       const { beat, k } = at;
       let cam = at.cam;
       if (beat.parallax && !view.mobile && !calm) cam = { x: cam.x + (pointer.x - 0.5) * 0.018, y: cam.y + (pointer.y - 0.5) * 0.026, s: cam.s };
-      // The pointer turns the device. Anywhere on the screen it only tilts it a little; moving across
-      // the device itself flips it right over to its back, and back again. Once the page scrolls, the
-      // scroll takes the flip over, so the device eases back to the tilt range first.
       const box = placement(view, 1600, 900, cam);
-      const u = (pointer.x * W - box.dx) / box.dw; // pointer in frame space; the device sits at u .23-.77, v .16-.78
-      const v = (pointer.y * H - box.dy) / box.dh;
-      const over = !view.mobile && !calm && pointer.moved > 0 && beat.id === "hero" && k < 0.04 && u > 0.2 && u < 0.8 && v > 0.12 && v < 0.82;
-      const idle = !over && now - pointer.moved > 2200;
-      const tilt = 0.34 * smooth((pointer.x - 0.22) / 0.72);
-      const steerTarget = calm ? 0.05 : idle ? 0.05 + 0.05 * Math.sin(now / 1700) : over ? lerp(tilt, 1, smooth((u - 0.34) / 0.3)) : tilt;
-      // a light spring rather than a plain ease: quicker to follow the hand, and it settles with a little weight
+      lastBox = box;
+      heroLive = hasMouse && !view.mobile && !calm && beat.id === "hero" && k < 0.04;
+      if (!heroLive) {
+        // once the page scrolls, the scroll owns the turn: back to the front, hands off
+        if (drag) endDrag();
+        face = 0;
+      }
+      const idle = !drag && now - pointer.moved > 2200;
+      // the device faces the pointer a little: higher on the screen tips its top away, a few degrees at most
+      const tilt = calm ? 0.02 : idle ? 0.02 + 0.012 * Math.sin(now / 1700) : 0.012 + 0.05 * smooth(1 - pointer.y);
+      let steerTarget = face ? 1 - tilt * 0.6 : tilt;
+      // dragging: about one device height of travel is the whole flip, up turns it over, down brings it back
+      if (drag) steerTarget = clamp01(drag.a0 + (drag.y0 - drag.y) / (box.dh * 0.56));
       const dt = Math.min(0.05, Math.max(0.001, (now - lastT) / 1000));
       lastT = now;
-      const stiff = idle ? 6 : 150;
-      const damp = 2 * Math.sqrt(stiff) * (idle ? 1 : 0.74);
+      const stiff = drag ? 260 : idle ? 8 : 32;
+      const damp = 2 * Math.sqrt(stiff); // critically damped: follows without bouncing
       steerV += (stiff * (steerTarget - steer) - damp * steerV) * dt;
-      steer += steerV * dt;
+      steer = clamp01(steer + steerV * dt);
+      const steerClip = angleToClip(steer);
+
+      if (hasMouse && hintRef.current) {
+        const hEl = hintRef.current;
+        const show = heroLive && !hinted && document.documentElement.dataset.intro === "done";
+        hEl.style.opacity = show ? "1" : "0";
+        const c = project(box, 0.5, 0.845);
+        hEl.style.transform = `translate3d(${c.x.toFixed(1)}px, ${c.y.toFixed(1)}px, 0) translate(-50%, 0)`;
+      }
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.fillStyle = STAGE;
@@ -230,7 +303,7 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
           if (L.t0 === "loop") {
             const dur = n / m.fps;
             t = ((now / 1000) % dur) / dur;
-          } else if (L.t0 === "mouse") t = view.mobile && L.m0 !== undefined ? lerp(L.m0, L.m1 ?? L.m0, k) : lerp(steer, L.t1 ?? steer, k);
+          } else if (L.t0 === "mouse") t = view.mobile && L.m0 !== undefined ? lerp(L.m0, L.m1 ?? L.m0, k) : lerp(steerClip, L.t1 ?? steerClip, k);
           else t = lerp(L.t0, L.t1 ?? L.t0, k);
           const i = Math.round(clamp01(t) * (n - 1));
           store.want(L.clip, i);
@@ -323,7 +396,7 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
 
       if (progressRef.current) progressRef.current.style.transform = `scaleX(${clamp01(p / tl.total).toFixed(4)})`;
 
-      if (dbg) dbg.textContent = `${id} pos ${p.toFixed(2)} beat ${beat.id} ${view.W}x${view.H} ${view.mobile ? "stacked" : "wide"} dpr ${dpr}\nset ${setName} frames ${store?.loaded ?? 0}/${store?.total ?? 0} ${m ? "" : "manifest missing"} ${calm ? "reduced-motion" : ""}\nua ${navigator.userAgent.slice(0, 90)}`;
+      if (dbg) dbg.textContent = `${id} pos ${p.toFixed(2)} turn ${steer.toFixed(3)} beat ${beat.id} ${view.W}x${view.H} ${view.mobile ? "stacked" : "wide"} dpr ${dpr}\nset ${setName} frames ${store?.loaded ?? 0}/${store?.total ?? 0} ${m ? "" : "manifest missing"} ${calm ? "reduced-motion" : ""}\nua ${navigator.userAgent.slice(0, 90)}`;
 
       if (inView) raf = requestAnimationFrame(render);
     }
@@ -360,6 +433,13 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
       io.disconnect();
       ro.disconnect();
       store?.destroy();
+      if (hasMouse) {
+        window.removeEventListener("pointerdown", onDown);
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        window.removeEventListener("pointercancel", onUp);
+        endDrag();
+      }
     };
   }, [clips, tl, copy, callouts, screens, tail]);
 
@@ -412,6 +492,17 @@ function PinnedFilm({ id, label, clips, tl, copy, callouts = [], screens = [], t
             </div>
           </div>
         ))}
+
+        {tl.beats.some((b) => b.layers.some((L) => L.t0 === "mouse")) && (
+          <div ref={hintRef} aria-hidden="true" className="pointer-events-none absolute top-0 left-0 z-[1] hidden opacity-0 transition-opacity duration-700 lg:block">
+            <span className="flex items-center gap-2 rounded-full border border-white/10 bg-night/55 px-3.5 py-1.5 text-[0.68rem] font-medium tracking-[0.16em] whitespace-nowrap text-aluminium/80 uppercase backdrop-blur">
+              <svg viewBox="0 0 12 16" className="h-3.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 1.5v13M2.5 5 6 1.5 9.5 5M2.5 11 6 14.5 9.5 11" />
+              </svg>
+              Drag to flip
+            </span>
+          </div>
+        )}
 
         <div className="absolute inset-0">
           {copy.map((c) => (
