@@ -31,7 +31,6 @@ export const nav = [
   { href: "#system", label: "How it works" },
   { href: "#apps", label: "Apps" },
   { href: "#specs", label: "Tech specs" },
-  { href: "#compare", label: "Compare" },
 ];
 
 export const legalNav = [
@@ -262,9 +261,9 @@ export const specs = {
 /* ------------------------------------------------------------------ film C: trust */
 
 export const trust = {
-  title: "Certified by Vaad HaKehilos.",
+  title: "Rabbinically certified.",
   titleSecond: "Tested by dozens of satisfied users.",
-  body: "Rabbinically certified. Every Bizmo can be set to the standard of your community, institution or business.",
+  body: "Every Bizmo can be set to the standard of your community, institution or business.",
 };
 
 /* ------------------------------------------------------------------ comparison */
@@ -282,7 +281,7 @@ export const compare = {
     ["Speed", "Slowed by a proxy server", "Native speed, no proxy", "speed"],
     ["Appearance", "Looks like any device", "Visually distinct, recognizable as kosher", "eye"],
     ["Protection", "Can be bypassed", "Locked bootloader, verified boot, full encryption", "lock"],
-    ["Certification", "None", "Certified by Vaad HaKehilos", "certified"],
+    ["Certification", "None", "Rabbinically certified", "certified"],
   ] as [string, string, string, string][],
 };
 

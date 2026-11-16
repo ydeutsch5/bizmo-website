@@ -17,8 +17,7 @@ npm run dev        # http://localhost:3000
 | Apps | `components/sections/Apps.tsx` | About 190 apps by category (keyboard-accessible tabs), plus "Not on Bizmo" |
 | Speed | `components/sections/Speed.tsx` | Scroll-driven diagram: filter-server detour versus direct |
 | Film B, "Specifications" | `films.tsx` → `DetailFilm` | Camera lens close-up, edge reveal, confirmed specs |
-| Compare | `components/sections/Compare.tsx` | Real `<table>` on desktop, stacked list on phones |
-| Film C, certification | `films.tsx` → `TrustFilm` | Engraved logo macro with Vaad HaKehilos / Safe Telecom |
+| Film C, certification | `films.tsx` → `TrustFilm` | Engraved logo macro, Rabbinically certified |
 | Who it's for | `components/sections/Audience.tsx` | Replacement wording, roles, front/back render |
 | Sign-up | `components/sections/Notify.tsx` + `app/api/notify/route.ts` | Name, email, city |
 
